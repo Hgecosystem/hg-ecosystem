@@ -32,26 +32,33 @@
 
 /* ─── Design tokens ────────────────────────────────────────────── */
 :root {
-  /* ── Light page background: three-tone gradient ── */
-  --page-bg-from:   #f7f8ff;   /* near-white with cool tint */
-  --page-bg-mid:    #eef0fa;   /* pale blue-grey */
-  --page-bg-to:     #ede9f7;   /* light lavender */
+  /* ── Page background ── */
+  --page-bg-base:       #f4f4f6;   /* soft white-grey neutral */
 
-  /* ── Hero card background ── */
-  --hero-card-bg-from: #ffffff;
-  --hero-card-bg-to:   #f0f1fb;  /* very pale blue-grey */
+  /* ── Edge blooms ── */
+  --bloom-left-color:   #EF6A73;   /* coral-red, from left edge */
+  --bloom-right-color:  #3546BC;   /* deep navy, from right edge */
+  --bloom-left-opacity: 0.52;
+  --bloom-right-opacity: 0.46;
 
-  /* ── Dark spotlight section (diagram) ── */
+  /* ── Film grain ── */
+  --grain-opacity: 0.09;
+
+  /* ── Hero card ── */
+  --hero-card-bg:         #ffffff;
+  --hero-card-bg-to:      #f2f2f7;
+
+  /* ── Pastel hero mesh blob colors ── */
+  --mesh-blue:      #c4caf2;
+  --mesh-indigo:    #d2d0f0;
+  --mesh-teal:      #b8e2e0;
+  --mesh-violet:    #d9cff0;
+  --mesh-amber:     #fce9b2;
+
+  /* ── Dark spotlight section ── */
   --spotlight-bg:   #131734;
 
-  /* ── Pastel mesh blob colors ── */
-  --mesh-blue:      #c4caf2;   /* pale brand blue */
-  --mesh-indigo:    #d2d0f0;   /* soft indigo */
-  --mesh-teal:      #b8e2e0;   /* pale teal */
-  --mesh-violet:    #d9cff0;   /* light lavender-violet */
-  --mesh-amber:     #fce9b2;   /* pale amber */
-
-  /* ── Navy scale (used for dark text on light bg, and diagram) ── */
+  /* ── Navy scale ── */
   --n0: #090c1e;
   --n1: #131734;
   --n2: #171c3e;
@@ -76,16 +83,16 @@
   --amber:  #F5B533;
   --violet: #612CAD;
 
-  /* ── Text on light backgrounds ── */
-  --lt-text-1:  #131734;   /* headings — deepest navy */
-  --lt-text-2:  #2d3566;   /* body — mid navy */
-  --lt-text-3:  #5e66a0;   /* muted / secondary */
-  --lt-text-4:  #8a91c4;   /* placeholder / tertiary */
+  /* ── Text on light ── */
+  --lt-text-1: #131734;
+  --lt-text-2: #2d3566;
+  --lt-text-3: #5e66a0;
+  --lt-text-4: #8a91c4;
 
-  /* ── Text on dark backgrounds (diagram section) ── */
-  --dk-text-1:  #eceffe;
-  --dk-text-2:  #9ba3d4;
-  --dk-text-3:  #5e669e;
+  /* ── Text on dark ── */
+  --dk-text-1: #eceffe;
+  --dk-text-2: #9ba3d4;
+  --dk-text-3: #5e669e;
 
   --radius-card: 25px;
   --font: 'Poppins', system-ui, sans-serif;
@@ -95,13 +102,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  background: linear-gradient(
-    160deg,
-    var(--page-bg-from)  0%,
-    var(--page-bg-mid)  50%,
-    var(--page-bg-to)  100%
-  );
-  background-attachment: fixed;
+  background: var(--page-bg-base);
   color: var(--lt-text-1);
   font-family: var(--font);
   font-size: 16px;
@@ -112,6 +113,85 @@ body {
 
 a { text-decoration: none; color: inherit; }
 
+/* ─── Page background: edge blooms ────────────────────────────── */
+/*
+    Two large radial ellipses anchored to the left and right edges of
+    the viewport, fixed so they stay put while the page scrolls.
+    Both are behind all content (z-index: 0) and blurred heavily so
+    they read as soft color washes rather than distinct shapes.
+*/
+.page-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.bloom {
+  position: absolute;
+  /*
+    Large enough to fill roughly 2/3 of the viewport width.
+    Anchored near the top corners so the color is most intense
+    in the upper-left / upper-right and fades toward the center.
+    Heavy blur (130px) matches the reference's very gradual falloff.
+  */
+  width: 74vw;
+  height: 130vh;
+  top: -15vh;
+  border-radius: 50%;
+  filter: blur(130px);
+}
+
+.bloom--left {
+  left: -28vw;
+  background: radial-gradient(
+    ellipse at 35% 35%,
+    var(--bloom-left-color) 0%,
+    transparent 68%
+  );
+  opacity: var(--bloom-left-opacity);
+}
+
+.bloom--right {
+  right: -28vw;
+  background: radial-gradient(
+    ellipse at 65% 35%,
+    var(--bloom-right-color) 0%,
+    transparent 68%
+  );
+  opacity: var(--bloom-right-opacity);
+}
+
+/* ─── Film grain overlay ───────────────────────────────────────── */
+/*
+    An SVG feTurbulence fractalNoise pattern at very low opacity,
+    sitting on top of all content (z-index: 9999) to add fine-grained
+    static texture. mix-blend-mode: overlay means it lightens peaks
+    and darkens valleys, which reads as film grain on any background.
+    Pointer-events: none so it never interferes with interaction.
+*/
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: var(--grain-opacity);
+  mix-blend-mode: overlay;
+}
+
+.grain-overlay svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ─── All page content sits above bg blooms ────────────────────── */
+main {
+  position: relative;
+  z-index: 1;
+}
+
 /* ─── Hero wrapper ─────────────────────────────────────────────── */
 .hero-wrap {
   padding: 20px 2.5vw 0;
@@ -121,8 +201,8 @@ a { text-decoration: none; color: inherit; }
   position: relative;
   background: linear-gradient(
     150deg,
-    var(--hero-card-bg-from) 0%,
-    var(--hero-card-bg-to)  100%
+    var(--hero-card-bg)    0%,
+    var(--hero-card-bg-to) 100%
   );
   border-radius: var(--radius-card);
   overflow: hidden;
@@ -270,9 +350,7 @@ a { text-decoration: none; color: inherit; }
   transform: translateY(-1px);
   box-shadow: 0 8px 28px rgba(53, 70, 188, 0.28);
 }
-.btn-primary:hover .btn-icon {
-  transform: translateX(4px);
-}
+.btn-primary:hover .btn-icon { transform: translateX(4px); }
 
 .btn-secondary {
   background: transparent;
@@ -285,15 +363,12 @@ a { text-decoration: none; color: inherit; }
   color: var(--lt-text-1);
   background: rgba(53, 70, 188, 0.04);
 }
-.btn-secondary:hover .btn-icon {
-  transform: translateX(3px);
-}
+.btn-secondary:hover .btn-icon { transform: translateX(3px); }
 
 .btn-icon {
   display: inline-flex;
   align-items: center;
   transition: transform 0.22s ease;
-  font-style: normal;
   flex-shrink: 0;
 }
 
@@ -369,9 +444,30 @@ a { text-decoration: none; color: inherit; }
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .btn, .btn-icon, .btn-primary, .btn-secondary { transition: none; }
+  .btn, .btn-icon { transition: none; }
 }
 </style>
+
+<!-- ── Fixed background layer: edge color blooms ─────────────────── -->
+<div class="page-bg" aria-hidden="true">
+  <div class="bloom bloom--left"></div>
+  <div class="bloom bloom--right"></div>
+</div>
+
+<!-- ── Film grain overlay ─────────────────────────────────────────── -->
+<div class="grain-overlay" aria-hidden="true">
+  <svg xmlns="http://www.w3.org/2000/svg">
+    <filter id="grain">
+      <feTurbulence
+        type="fractalNoise"
+        baseFrequency="0.80"
+        numOctaves="4"
+        stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+    </filter>
+    <rect width="100%" height="100%" filter="url(#grain)"/>
+  </svg>
+</div>
 
 <main>
 
@@ -379,7 +475,6 @@ a { text-decoration: none; color: inherit; }
   <section class="hero-wrap" aria-label="Hero">
     <div class="hero-card">
 
-      <!-- Gradient mesh -->
       <div class="mesh" aria-hidden="true">
         <div class="mesh-blob mesh-blob--1"></div>
         <div class="mesh-blob mesh-blob--2"></div>
@@ -388,7 +483,6 @@ a { text-decoration: none; color: inherit; }
         <div class="mesh-blob mesh-blob--5"></div>
       </div>
 
-      <!-- Content -->
       <div class="hero-content">
         <span class="eyebrow">Our Ecosystem</span>
 
@@ -435,7 +529,7 @@ a { text-decoration: none; color: inherit; }
     <div class="diagram-wrap">
       <svg viewBox="0 0 690 620" role="img" xmlns="http://www.w3.org/2000/svg" aria-labelledby="diagram-title diagram-desc">
         <title id="diagram-title">Health Generation ecosystem diagram</title>
-        <desc id="diagram-desc">Three equal-sized overlapping circles: HealthGen (advisory) at top-centre, NurseGen (workforce) at bottom-left, CareGen (intelligence and technology) at bottom-right. Each circle fades to transparent toward the shared centre, remaining fully opaque at its outer edge.</desc>
+        <desc id="diagram-desc">Three equal-sized overlapping circles: HealthGen (advisory) at top-centre, NurseGen (workforce) at bottom-left, CareGen (intelligence and technology) at bottom-right.</desc>
         <defs>
           <linearGradient id="gradHG" x1="50%" y1="0%" x2="50%" y2="100%">
             <stop offset="0%"   stop-color="#3546BC" stop-opacity="1"/>
@@ -456,25 +550,18 @@ a { text-decoration: none; color: inherit; }
             <stop offset="62%"  stop-color="white" stop-opacity="0.88"/>
             <stop offset="100%" stop-color="white" stop-opacity="1"/>
           </linearGradient>
-          <clipPath id="clipHG">
-            <circle cx="345" cy="196" r="162"/>
-          </clipPath>
-          <clipPath id="clipNG">
-            <circle cx="212" cy="424" r="162"/>
-          </clipPath>
-          <clipPath id="clipCG">
-            <circle cx="478" cy="424" r="162"/>
-          </clipPath>
+          <clipPath id="clipHG"><circle cx="345" cy="196" r="162"/></clipPath>
+          <clipPath id="clipNG"><circle cx="212" cy="424" r="162"/></clipPath>
+          <clipPath id="clipCG"><circle cx="478" cy="424" r="162"/></clipPath>
           <mask id="maskShapeCG">
             <circle cx="478" cy="424" r="162" fill="url(#maskCG)"/>
           </mask>
         </defs>
 
         <rect width="690" height="620" fill="#131734"/>
-
         <rect x="183" y="34"  width="324" height="324" clip-path="url(#clipHG)" fill="url(#gradHG)"/>
         <rect x="50"  y="262" width="324" height="324" clip-path="url(#clipNG)" fill="url(#gradNG)"/>
-        <rect x="316" y="262" width="324" height="324" mask="url(#maskShapeCG)" fill="url(#gradCG)"/>
+        <rect x="316" y="262" width="324" height="324" mask="url(#maskShapeCG)"  fill="url(#gradCG)"/>
 
         <text x="345" y="183" text-anchor="middle" dominant-baseline="central"
               font-family="'Poppins', system-ui, sans-serif"
