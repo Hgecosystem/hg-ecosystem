@@ -1016,73 +1016,89 @@ main {
         <desc id="diagram-desc">Three overlapping soft-glow circles: HealthGen (advisory) at top-centre, NurseGen (workforce) at bottom-left, CareGen (intelligence and technology) at bottom-right.</desc>
         <defs>
           <!--
-            Radial gradients with animated focal point (fx/fy) and center
-            stop-color. Moving fx/fy shifts the hotspot within the blob —
-            the "liquid color flowing" effect. Each circle uses different
-            durations so they animate out of phase.
-            calcMode="spline" + matching start/end values = seamless loop.
+            Three-stop radial gradients with animated focal point (fx/fy)
+            and center stop-color. fx/fy sweeps the hotspot 50-60% across
+            the circle so the color shift is fully legible.
+            Each circle has independent durations to stay out of phase.
+            calcMode="spline" + same start/end value = seamless sine loop.
           -->
-          <radialGradient id="rgHG" cx="50%" cy="50%" r="50%" fx="35%" fy="30%">
-            <stop offset="0%" stop-color="#3546BC" stop-opacity="0.95">
+
+          <!-- HealthGen: mid-blue highlight → brand blue → dark navy shadow -->
+          <radialGradient id="rgHG" cx="50%" cy="50%" r="50%" fx="20%" fy="18%">
+            <stop offset="0%" stop-color="#394492" stop-opacity="0.95">
               <animate attributeName="stop-color"
-                values="#3546BC;#4858e2;#3546BC" dur="9s" repeatCount="indefinite"
+                values="#394492;#3546BC;#394492" dur="7s" repeatCount="indefinite"
                 calcMode="spline" keyTimes="0;0.5;1"
                 keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
             </stop>
-            <stop offset="52%" stop-color="#3546BC" stop-opacity="0.55"/>
-            <stop offset="100%" stop-color="#3546BC" stop-opacity="0"/>
+            <stop offset="42%" stop-color="#3546BC" stop-opacity="0.9"/>
+            <stop offset="78%" stop-color="#131734" stop-opacity="0.7"/>
+            <stop offset="100%" stop-color="#131734" stop-opacity="0"/>
+            <!-- wide sweep: 56pp travel on x, 56pp on y, independent durations -->
             <animate attributeName="fx"
-              values="35%;66%;35%" dur="9s" repeatCount="indefinite"
+              values="20%;76%;20%" dur="7s" repeatCount="indefinite"
               calcMode="spline" keyTimes="0;0.5;1"
               keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
             <animate attributeName="fy"
-              values="30%;63%;30%" dur="11s" repeatCount="indefinite"
+              values="18%;74%;18%" dur="9s" repeatCount="indefinite"
               calcMode="spline" keyTimes="0;0.5;1"
               keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
           </radialGradient>
 
-          <radialGradient id="rgNG" cx="50%" cy="50%" r="50%" fx="60%" fy="55%">
-            <stop offset="0%" stop-color="#59B0AB" stop-opacity="0.95">
+          <!-- NurseGen: pale teal highlight → brand teal → deep teal shadow -->
+          <radialGradient id="rgNG" cx="50%" cy="50%" r="50%" fx="72%" fy="70%">
+            <stop offset="0%" stop-color="#A8DAD7" stop-opacity="0.95">
               <animate attributeName="stop-color"
-                values="#59B0AB;#6dc8c2;#59B0AB" dur="10s" repeatCount="indefinite"
+                values="#A8DAD7;#59B0AB;#A8DAD7" dur="8s" repeatCount="indefinite"
                 calcMode="spline" keyTimes="0;0.5;1"
                 keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
             </stop>
-            <stop offset="52%" stop-color="#59B0AB" stop-opacity="0.55"/>
-            <stop offset="100%" stop-color="#59B0AB" stop-opacity="0"/>
+            <stop offset="44%" stop-color="#59B0AB" stop-opacity="0.9"/>
+            <stop offset="78%" stop-color="#1A5C59" stop-opacity="0.65"/>
+            <stop offset="100%" stop-color="#1A5C59" stop-opacity="0"/>
             <animate attributeName="fx"
-              values="60%;30%;60%" dur="10s" repeatCount="indefinite"
+              values="72%;20%;72%" dur="8s" repeatCount="indefinite"
               calcMode="spline" keyTimes="0;0.5;1"
               keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
             <animate attributeName="fy"
-              values="55%;28%;55%" dur="8s" repeatCount="indefinite"
+              values="70%;20%;70%" dur="6s" repeatCount="indefinite"
               calcMode="spline" keyTimes="0;0.5;1"
               keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
           </radialGradient>
 
-          <radialGradient id="rgCG" cx="50%" cy="50%" r="50%" fx="45%" fy="62%">
-            <stop offset="0%" stop-color="#F5B533" stop-opacity="0.9">
-              <animate attributeName="stop-color"
-                values="#F5B533;#ffc84a;#F5B533" dur="7s" repeatCount="indefinite"
-                calcMode="spline" keyTimes="0;0.5;1"
-                keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
-            </stop>
-            <stop offset="40%" stop-color="#612CAD" stop-opacity="0.75">
-              <animate attributeName="stop-color"
-                values="#612CAD;#7535d4;#612CAD" dur="12s" repeatCount="indefinite"
-                calcMode="spline" keyTimes="0;0.5;1"
-                keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
-            </stop>
-            <stop offset="100%" stop-color="#612CAD" stop-opacity="0"/>
-            <animate attributeName="fx"
-              values="45%;72%;45%" dur="7s" repeatCount="indefinite"
-              calcMode="spline" keyTimes="0;0.5;1"
-              keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
-            <animate attributeName="fy"
-              values="62%;28%;62%" dur="12s" repeatCount="indefinite"
-              calcMode="spline" keyTimes="0;0.5;1"
-              keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
+          <!--
+            CareGen: two-color diagonal linear gradient (#220749 → #612CAD).
+            gradientUnits="objectBoundingBox" so coordinates are 0–1 fractions
+            of the circle's bounding box and move correctly with JS translation.
+            x1/y1/x2/y2 shift ±0.42 (≈176px) diagonally so the bright purple
+            fully sweeps across the circle and back every cycle.
+
+            The gradient on its own fills the circle fully opaque, which would
+            make it appear larger than the other blobs. cgFade is a radial mask
+            (white center → black edge in objectBoundingBox space) that restores
+            the same soft edge as HealthGen and NurseGen.
+          -->
+          <radialGradient id="cgFadeRg" cx="50%" cy="50%" r="50%">
+            <stop offset="0%"   stop-color="white" stop-opacity="1"/>
+            <stop offset="100%" stop-color="white" stop-opacity="0"/>
           </radialGradient>
+          <mask id="cgFade" maskContentUnits="objectBoundingBox">
+            <rect x="0" y="0" width="1" height="1" fill="url(#cgFadeRg)"/>
+          </mask>
+
+          <linearGradient id="rgCG" x1="-0.42" y1="-0.42" x2="0.58" y2="0.58"
+                          gradientUnits="objectBoundingBox">
+            <stop offset="0%"   stop-color="#220749" stop-opacity="0.95"/>
+            <stop offset="100%" stop-color="#612CAD" stop-opacity="0.95"/>
+            <animate attributeName="x1" values="-0.42;0.42;-0.42" dur="8s" repeatCount="indefinite"
+              calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
+            <animate attributeName="y1" values="-0.42;0.42;-0.42" dur="8s" repeatCount="indefinite"
+              calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
+            <animate attributeName="x2" values="0.58;1.42;0.58" dur="8s" repeatCount="indefinite"
+              calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
+            <animate attributeName="y2" values="0.58;1.42;0.58" dur="8s" repeatCount="indefinite"
+              calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
+          </linearGradient>
 
           <!-- Soft gaussian blur — applied per blob for organic glowing edges -->
           <filter id="blobBlur" x="-80%" y="-80%" width="260%" height="260%"
@@ -1126,7 +1142,7 @@ main {
 
         <!-- CareGen — amber→purple blob + label -->
         <g id="blob-cg">
-          <circle cx="478" cy="424" r="210" fill="url(#rgCG)" filter="url(#blobBlur)"/>
+          <circle cx="478" cy="424" r="210" fill="url(#rgCG)" mask="url(#cgFade)" filter="url(#blobBlur)"/>
           <text x="478" y="411" text-anchor="middle" dominant-baseline="central"
                 font-family="'Manrope', system-ui, sans-serif"
                 font-size="16.5" font-weight="700" fill="#E8EBF8" letter-spacing="0.01em">CareGen</text>
