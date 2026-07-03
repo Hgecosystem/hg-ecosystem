@@ -597,7 +597,7 @@ main {
 }
 
 /* ══════════════════════════════════════════════════════════════════
-   SECTION 5: WHY PROVIDERS — sticky left / scrolling cards
+   SECTION 5: WHY PROVIDERS
    ══════════════════════════════════════════════════════════════════ */
 
 .why-section {
@@ -616,11 +616,6 @@ main {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   box-shadow: 0 2px 20px rgba(53, 70, 188, 0.05);
-}
-
-.why-left {
-  position: sticky;
-  top: 48px;
 }
 
 .why-badge {
@@ -928,7 +923,6 @@ main {
 @media (max-width: 820px) {
   .why-section { margin: 20px 16px; }
   .why-panel   { grid-template-columns: 1fr; gap: 40px; padding: 48px 6% 56px; }
-  .why-left    { position: static; }
 }
 
 /* ─── Navbar ──────────────────────────────────────────────────────── */
@@ -1642,6 +1636,7 @@ main {
   tick();
 })();
 </script>
+
 </main>
 
 <footer class="site-footer" aria-label="Site footer">
