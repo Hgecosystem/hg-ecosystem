@@ -359,7 +359,8 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow: hidden;
+  /* overflow: visible — lets gaussian blur bleed organically into the
+     dark card background without a rectangular hard clip */
 }
 
 .diagram-label {
@@ -397,7 +398,7 @@ main {
 .diagram-wrap {
   width: 100%;
   max-width: 640px;
-  overflow-x: auto;
+  overflow: visible;
 }
 
 .diagram-wrap svg {
@@ -1009,62 +1010,135 @@ main {
     </p>
 
     <div class="diagram-wrap">
-      <svg viewBox="0 0 690 620" role="img" xmlns="http://www.w3.org/2000/svg" aria-labelledby="diagram-title diagram-desc">
+      <svg viewBox="0 0 690 620" role="img" xmlns="http://www.w3.org/2000/svg"
+           aria-labelledby="diagram-title diagram-desc" style="overflow: visible;">
         <title id="diagram-title">Health Generation ecosystem diagram</title>
-        <desc id="diagram-desc">Three equal-sized overlapping circles: HealthGen (advisory) at top-centre, NurseGen (workforce) at bottom-left, CareGen (intelligence and technology) at bottom-right.</desc>
+        <desc id="diagram-desc">Three overlapping soft-glow circles: HealthGen (advisory) at top-centre, NurseGen (workforce) at bottom-left, CareGen (intelligence and technology) at bottom-right.</desc>
         <defs>
-          <linearGradient id="gradHG" x1="50%" y1="0%" x2="50%" y2="100%">
-            <stop offset="0%"   stop-color="#3546BC" stop-opacity="1"/>
+          <!--
+            Radial gradients with animated focal point (fx/fy) and center
+            stop-color. Moving fx/fy shifts the hotspot within the blob —
+            the "liquid color flowing" effect. Each circle uses different
+            durations so they animate out of phase.
+            calcMode="spline" + matching start/end values = seamless loop.
+          -->
+          <radialGradient id="rgHG" cx="50%" cy="50%" r="50%" fx="35%" fy="30%">
+            <stop offset="0%" stop-color="#3546BC" stop-opacity="0.95">
+              <animate attributeName="stop-color"
+                values="#3546BC;#4858e2;#3546BC" dur="9s" repeatCount="indefinite"
+                calcMode="spline" keyTimes="0;0.5;1"
+                keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
+            </stop>
+            <stop offset="52%" stop-color="#3546BC" stop-opacity="0.55"/>
             <stop offset="100%" stop-color="#3546BC" stop-opacity="0"/>
-          </linearGradient>
-          <linearGradient id="gradNG" x1="100%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%"   stop-color="#59B0AB" stop-opacity="0"/>
-            <stop offset="100%" stop-color="#59B0AB" stop-opacity="1"/>
-          </linearGradient>
-          <linearGradient id="gradCG" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%"   stop-color="#050025" stop-opacity="1"/>
-            <stop offset="42%"  stop-color="#612CAD" stop-opacity="0.90"/>
-            <stop offset="100%" stop-color="#F5B533" stop-opacity="1"/>
-          </linearGradient>
-          <linearGradient id="maskCG" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%"   stop-color="white" stop-opacity="0"/>
-            <stop offset="30%"  stop-color="white" stop-opacity="0.4"/>
-            <stop offset="62%"  stop-color="white" stop-opacity="0.88"/>
-            <stop offset="100%" stop-color="white" stop-opacity="1"/>
-          </linearGradient>
-          <clipPath id="clipHG"><circle cx="345" cy="196" r="162"/></clipPath>
-          <clipPath id="clipNG"><circle cx="212" cy="424" r="162"/></clipPath>
-          <clipPath id="clipCG"><circle cx="478" cy="424" r="162"/></clipPath>
-          <mask id="maskShapeCG">
-            <circle cx="478" cy="424" r="162" fill="url(#maskCG)"/>
-          </mask>
+            <animate attributeName="fx"
+              values="35%;66%;35%" dur="9s" repeatCount="indefinite"
+              calcMode="spline" keyTimes="0;0.5;1"
+              keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
+            <animate attributeName="fy"
+              values="30%;63%;30%" dur="11s" repeatCount="indefinite"
+              calcMode="spline" keyTimes="0;0.5;1"
+              keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
+          </radialGradient>
+
+          <radialGradient id="rgNG" cx="50%" cy="50%" r="50%" fx="60%" fy="55%">
+            <stop offset="0%" stop-color="#59B0AB" stop-opacity="0.95">
+              <animate attributeName="stop-color"
+                values="#59B0AB;#6dc8c2;#59B0AB" dur="10s" repeatCount="indefinite"
+                calcMode="spline" keyTimes="0;0.5;1"
+                keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
+            </stop>
+            <stop offset="52%" stop-color="#59B0AB" stop-opacity="0.55"/>
+            <stop offset="100%" stop-color="#59B0AB" stop-opacity="0"/>
+            <animate attributeName="fx"
+              values="60%;30%;60%" dur="10s" repeatCount="indefinite"
+              calcMode="spline" keyTimes="0;0.5;1"
+              keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
+            <animate attributeName="fy"
+              values="55%;28%;55%" dur="8s" repeatCount="indefinite"
+              calcMode="spline" keyTimes="0;0.5;1"
+              keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
+          </radialGradient>
+
+          <radialGradient id="rgCG" cx="50%" cy="50%" r="50%" fx="45%" fy="62%">
+            <stop offset="0%" stop-color="#F5B533" stop-opacity="0.9">
+              <animate attributeName="stop-color"
+                values="#F5B533;#ffc84a;#F5B533" dur="7s" repeatCount="indefinite"
+                calcMode="spline" keyTimes="0;0.5;1"
+                keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
+            </stop>
+            <stop offset="40%" stop-color="#612CAD" stop-opacity="0.75">
+              <animate attributeName="stop-color"
+                values="#612CAD;#7535d4;#612CAD" dur="12s" repeatCount="indefinite"
+                calcMode="spline" keyTimes="0;0.5;1"
+                keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
+            </stop>
+            <stop offset="100%" stop-color="#612CAD" stop-opacity="0"/>
+            <animate attributeName="fx"
+              values="45%;72%;45%" dur="7s" repeatCount="indefinite"
+              calcMode="spline" keyTimes="0;0.5;1"
+              keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
+            <animate attributeName="fy"
+              values="62%;28%;62%" dur="12s" repeatCount="indefinite"
+              calcMode="spline" keyTimes="0;0.5;1"
+              keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/>
+          </radialGradient>
+
+          <!-- Soft gaussian blur — applied per blob for organic glowing edges -->
+          <filter id="blobBlur" x="-80%" y="-80%" width="260%" height="260%"
+                  color-interpolation-filters="sRGB">
+            <feGaussianBlur stdDeviation="24"/>
+          </filter>
+
+          <!-- Grain texture overlay -->
+          <filter id="svgGrain" x="0%" y="0%" width="100%" height="100%"
+                  color-interpolation-filters="sRGB">
+            <feTurbulence type="fractalNoise" baseFrequency="0.82" numOctaves="4"
+                          stitchTiles="stitch"/>
+            <feColorMatrix type="saturate" values="0"/>
+          </filter>
         </defs>
 
+        <!-- Dark background -->
         <rect width="690" height="620" fill="#131734"/>
-        <rect x="183" y="34"  width="324" height="324" clip-path="url(#clipHG)" fill="url(#gradHG)"/>
-        <rect x="50"  y="262" width="324" height="324" clip-path="url(#clipNG)" fill="url(#gradNG)"/>
-        <rect x="316" y="262" width="324" height="324" mask="url(#maskShapeCG)"  fill="url(#gradCG)"/>
 
-        <text x="345" y="183" text-anchor="middle" dominant-baseline="central"
-              font-family="'Manrope', system-ui, sans-serif"
-              font-size="16.5" font-weight="700" fill="#E8EBF8" letter-spacing="0.01em">HealthGen</text>
-        <text x="345" y="210" text-anchor="middle" dominant-baseline="central"
-              font-family="'Manrope', system-ui, sans-serif"
-              font-size="11.5" font-weight="400" fill="#9BA3D4" letter-spacing="0.02em">Advisory · Methodology · Delivery</text>
+        <!-- HealthGen — blue blob + label, grouped for JS repulsion -->
+        <g id="blob-hg">
+          <circle cx="345" cy="196" r="210" fill="url(#rgHG)" filter="url(#blobBlur)"/>
+          <text x="345" y="183" text-anchor="middle" dominant-baseline="central"
+                font-family="'Manrope', system-ui, sans-serif"
+                font-size="16.5" font-weight="700" fill="#E8EBF8" letter-spacing="0.01em">HealthGen</text>
+          <text x="345" y="210" text-anchor="middle" dominant-baseline="central"
+                font-family="'Manrope', system-ui, sans-serif"
+                font-size="11.5" font-weight="400" fill="#9BA3D4" letter-spacing="0.02em">Advisory · Methodology · Delivery</text>
+        </g>
 
-        <text x="212" y="411" text-anchor="middle" dominant-baseline="central"
-              font-family="'Manrope', system-ui, sans-serif"
-              font-size="16.5" font-weight="700" fill="#E8EBF8" letter-spacing="0.01em">NurseGen</text>
-        <text x="212" y="436" text-anchor="middle" dominant-baseline="central"
-              font-family="'Manrope', system-ui, sans-serif"
-              font-size="11.5" font-weight="400" fill="#9BA3D4" letter-spacing="0.04em">Workforce</text>
+        <!-- NurseGen — teal blob + label -->
+        <g id="blob-ng">
+          <circle cx="212" cy="424" r="210" fill="url(#rgNG)" filter="url(#blobBlur)"/>
+          <text x="212" y="411" text-anchor="middle" dominant-baseline="central"
+                font-family="'Manrope', system-ui, sans-serif"
+                font-size="16.5" font-weight="700" fill="#E8EBF8" letter-spacing="0.01em">NurseGen</text>
+          <text x="212" y="436" text-anchor="middle" dominant-baseline="central"
+                font-family="'Manrope', system-ui, sans-serif"
+                font-size="11.5" font-weight="400" fill="#9BA3D4" letter-spacing="0.04em">Workforce</text>
+        </g>
 
-        <text x="478" y="411" text-anchor="middle" dominant-baseline="central"
-              font-family="'Manrope', system-ui, sans-serif"
-              font-size="16.5" font-weight="700" fill="#E8EBF8" letter-spacing="0.01em">CareGen</text>
-        <text x="478" y="436" text-anchor="middle" dominant-baseline="central"
-              font-family="'Manrope', system-ui, sans-serif"
-              font-size="11.5" font-weight="400" fill="#9BA3D4" letter-spacing="0.02em">Intelligence + tech</text>
+        <!-- CareGen — amber→purple blob + label -->
+        <g id="blob-cg">
+          <circle cx="478" cy="424" r="210" fill="url(#rgCG)" filter="url(#blobBlur)"/>
+          <text x="478" y="411" text-anchor="middle" dominant-baseline="central"
+                font-family="'Manrope', system-ui, sans-serif"
+                font-size="16.5" font-weight="700" fill="#E8EBF8" letter-spacing="0.01em">CareGen</text>
+          <text x="478" y="436" text-anchor="middle" dominant-baseline="central"
+                font-family="'Manrope', system-ui, sans-serif"
+                font-size="11.5" font-weight="400" fill="#9BA3D4" letter-spacing="0.02em">Intelligence + tech</text>
+        </g>
+
+        <!-- Grain overlay — sits above blobs -->
+        <rect width="690" height="620" fill="rgb(128,128,128)"
+              filter="url(#svgGrain)"
+              style="mix-blend-mode: overlay; opacity: 0.09; pointer-events: none;"/>
       </svg>
     </div>
   </section>
@@ -1319,4 +1393,84 @@ main {
 
 
 
+
+<script>
+(function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    var s = document.getElementById('ecosystem');
+    var sv = s && s.querySelector('svg');
+    if (sv && sv.pauseAnimations) sv.pauseAnimations();
+    return;
+  }
+
+  var section = document.getElementById('ecosystem');
+  var svgEl   = section && section.querySelector('svg');
+  if (!svgEl) return;
+
+  var blobs = [
+    { el: svgEl.querySelector('#blob-hg'), ox: 345, oy: 196 },
+    { el: svgEl.querySelector('#blob-ng'), ox: 212, oy: 424 },
+    { el: svgEl.querySelector('#blob-cg'), ox: 478, oy: 424 },
+  ].filter(function (b) { return b.el; });
+
+  var REPEL_R   = 270;   /* SVG-unit radius at which repulsion begins     */
+  var MAX_PUSH  = 44;    /* SVG units — max displacement at cursor center  */
+  var LERP      = 0.07;  /* per-frame ease fraction (~fluid spring feel)   */
+
+  var mouse = { x: -9999, y: -9999 };
+  var curr  = blobs.map(function () { return { x: 0, y: 0 }; });
+  var tgt   = blobs.map(function () { return { x: 0, y: 0 }; });
+
+  /* Map client viewport coords → SVG viewBox coords */
+  function toSVG(cx, cy) {
+    var r = svgEl.getBoundingClientRect();
+    return {
+      x: (cx - r.left) / r.width  * 690,
+      y: (cy - r.top)  / r.height * 620,
+    };
+  }
+
+  /* Listen on the whole dark card so repulsion starts before entering SVG */
+  section.addEventListener('mousemove', function (e) {
+    var p = toSVG(e.clientX, e.clientY);
+    mouse.x = p.x;
+    mouse.y = p.y;
+  }, { passive: true });
+
+  section.addEventListener('mouseleave', function () {
+    mouse.x = -9999;
+    mouse.y = -9999;
+  }, { passive: true });
+
+  function tick() {
+    requestAnimationFrame(tick);
+
+    blobs.forEach(function (b, i) {
+      var dx   = b.ox - mouse.x;
+      var dy   = b.oy - mouse.y;
+      var dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist < REPEL_R && dist > 0.5) {
+        /* Quadratic falloff: gentle at range, stronger up close */
+        var t    = 1 - dist / REPEL_R;
+        var push = MAX_PUSH * t * t;
+        tgt[i].x = (dx / dist) * push;
+        tgt[i].y = (dy / dist) * push;
+      } else {
+        tgt[i].x = 0;
+        tgt[i].y = 0;
+      }
+
+      /* Lerp current position toward target each frame */
+      curr[i].x += (tgt[i].x - curr[i].x) * LERP;
+      curr[i].y += (tgt[i].y - curr[i].y) * LERP;
+
+      b.el.setAttribute('transform',
+        'translate(' + curr[i].x.toFixed(2) + ',' + curr[i].y.toFixed(2) + ')');
+    });
+  }
+
+  tick();
+})();
+</script>
 </main>
