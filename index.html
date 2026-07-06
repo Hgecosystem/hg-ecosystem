@@ -449,6 +449,20 @@ main {
   height: auto;
 }
 
+/* ─── Blob gradient spin (CSS-animated, GPU-composited) ─────────── */
+.blob-spin {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.blob-spin--hg { animation: blob-cw   8s linear infinite; }
+.blob-spin--ng { animation: blob-ccw 11s linear infinite; }
+.blob-spin--cg { animation: blob-cw  14s linear infinite; }
+@keyframes blob-cw  { to { transform: rotate( 360deg); } }
+@keyframes blob-ccw { to { transform: rotate(-360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .blob-spin { animation: none !important; }
+}
+
 /* ─── Responsive ───────────────────────────────────────────────── */
 @media (max-width: 680px) {
   .hero-card {
@@ -1252,37 +1266,57 @@ main {
             calcMode="spline" + same start/end value = seamless sine loop.
           -->
 
-          <!-- HealthGen: mid-blue highlight → brand blue → dark navy shadow -->
-          <radialGradient id="rgHG" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-            <stop offset="0%"   stop-color="#3546BC" stop-opacity="1"/>
-            <stop offset="50%"  stop-color="#3546BC" stop-opacity="1"/>
-            <stop offset="100%" stop-color="#6B75B6" stop-opacity="0"/>
+          <!-- Rotating linear color gradients — each orb's inner <g> CSS-spins
+               these so the color sweeps around the orb (GPU-composited, no rAF).
+               gradientUnits="userSpaceOnUse" means the gradient rotates with the
+               parent <g> transform, giving visible direction change each frame. -->
+          <linearGradient id="lgHG" gradientUnits="userSpaceOnUse"
+              x1="197" y1="48" x2="493" y2="344">
+            <stop offset="0%"   stop-color="#3546BC"/>
+            <stop offset="100%" stop-color="#6B75B6"/>
+          </linearGradient>
+          <linearGradient id="lgNG" gradientUnits="userSpaceOnUse"
+              x1="63" y1="275" x2="360" y2="572">
+            <stop offset="0%"   stop-color="#59B0AB"/>
+            <stop offset="100%" stop-color="#A6D8D5"/>
+          </linearGradient>
+          <linearGradient id="lgCG" gradientUnits="userSpaceOnUse"
+              x1="330" y1="275" x2="627" y2="572">
+            <stop offset="0%"   stop-color="#612CAD"/>
+            <stop offset="100%" stop-color="#A37ED8"/>
+          </linearGradient>
+
+          <!-- Radial alpha masks — soft centre-to-edge fade for each orb circle -->
+          <radialGradient id="fadeHG" gradientUnits="userSpaceOnUse" cx="345" cy="196" r="210">
+            <stop offset="0%"   stop-color="white" stop-opacity="1"/>
+            <stop offset="50%"  stop-color="white" stop-opacity="1"/>
+            <stop offset="100%" stop-color="white" stop-opacity="0"/>
           </radialGradient>
-
-          <radialGradient id="rgNG" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-            <stop offset="0%"   stop-color="#59B0AB" stop-opacity="1"/>
-            <stop offset="50%"  stop-color="#59B0AB" stop-opacity="1"/>
-            <stop offset="100%" stop-color="#A6D8D5" stop-opacity="0"/>
+          <mask id="maskHG">
+            <rect x="0" y="0" width="690" height="620" fill="url(#fadeHG)"/>
+          </mask>
+          <radialGradient id="fadeNG" gradientUnits="userSpaceOnUse" cx="212" cy="424" r="210">
+            <stop offset="0%"   stop-color="white" stop-opacity="1"/>
+            <stop offset="50%"  stop-color="white" stop-opacity="1"/>
+            <stop offset="100%" stop-color="white" stop-opacity="0"/>
           </radialGradient>
-
-          <radialGradient id="rgCG" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-            <stop offset="0%"   stop-color="#612CAD" stop-opacity="1"/>
-            <stop offset="50%"  stop-color="#612CAD" stop-opacity="1"/>
-            <stop offset="100%" stop-color="#A37ED8" stop-opacity="0"/>
+          <mask id="maskNG">
+            <rect x="0" y="0" width="690" height="620" fill="url(#fadeNG)"/>
+          </mask>
+          <radialGradient id="fadeCG" gradientUnits="userSpaceOnUse" cx="478" cy="424" r="210">
+            <stop offset="0%"   stop-color="white" stop-opacity="1"/>
+            <stop offset="50%"  stop-color="white" stop-opacity="1"/>
+            <stop offset="100%" stop-color="white" stop-opacity="0"/>
           </radialGradient>
+          <mask id="maskCG">
+            <rect x="0" y="0" width="690" height="620" fill="url(#fadeCG)"/>
+          </mask>
 
-          <!-- Soft gaussian blur — applied per blob for organic glowing edges -->
-          <filter id="blobBlur" x="-80%" y="-80%" width="260%" height="260%"
-                  color-interpolation-filters="sRGB">
-            <feGaussianBlur stdDeviation="24"/>
-          </filter>
-
-          <!-- Grain texture overlay -->
-          <filter id="svgGrain" x="0%" y="0%" width="100%" height="100%"
-                  color-interpolation-filters="sRGB">
-            <feTurbulence type="fractalNoise" baseFrequency="0.82" numOctaves="4"
-                          stitchTiles="stitch"/>
-            <feColorMatrix type="saturate" values="0"/>
+          <!-- Soft gaussian blur — applied to inner spin group for organic glowing edges.
+               Reduced region and stdDeviation from 80%/24 to 40%/18 for faster compositing. -->
+          <filter id="blobBlur" x="-40%" y="-40%" width="180%" height="180%"
+                  filterRes="512" color-interpolation-filters="sRGB">
+            <feGaussianBlur stdDeviation="18"/>
           </filter>
         </defs>
 
@@ -1290,7 +1324,9 @@ main {
 
         <!-- HealthGen — blue blob + label, grouped for JS repulsion -->
         <g id="blob-hg">
-          <circle cx="345" cy="196" r="210" fill="url(#rgHG)" filter="url(#blobBlur)"/>
+          <g class="blob-spin blob-spin--hg" filter="url(#blobBlur)">
+            <circle cx="345" cy="196" r="210" fill="url(#lgHG)" mask="url(#maskHG)"/>
+          </g>
           <text x="345" y="182" text-anchor="middle" dominant-baseline="central"
                 font-family="'Manrope', system-ui, sans-serif"
                 font-size="19" font-weight="700" fill="#ffffff" letter-spacing="0.01em">HealthGen</text>
@@ -1301,7 +1337,9 @@ main {
 
         <!-- NurseGen — teal blob + label -->
         <g id="blob-ng">
-          <circle cx="212" cy="424" r="210" fill="url(#rgNG)" filter="url(#blobBlur)"/>
+          <g class="blob-spin blob-spin--ng" filter="url(#blobBlur)">
+            <circle cx="212" cy="424" r="210" fill="url(#lgNG)" mask="url(#maskNG)"/>
+          </g>
           <text x="212" y="410" text-anchor="middle" dominant-baseline="central"
                 font-family="'Manrope', system-ui, sans-serif"
                 font-size="19" font-weight="700" fill="#ffffff" letter-spacing="0.01em">NurseGen</text>
@@ -1312,7 +1350,9 @@ main {
 
         <!-- CareGen — two-tone purple blob + label -->
         <g id="blob-cg">
-          <circle cx="478" cy="424" r="210" fill="url(#rgCG)" filter="url(#blobBlur)"/>
+          <g class="blob-spin blob-spin--cg" filter="url(#blobBlur)">
+            <circle cx="478" cy="424" r="210" fill="url(#lgCG)" mask="url(#maskCG)"/>
+          </g>
           <text x="478" y="410" text-anchor="middle" dominant-baseline="central"
                 font-family="'Manrope', system-ui, sans-serif"
                 font-size="19" font-weight="700" fill="#ffffff" letter-spacing="0.01em">CareGen</text>
@@ -1320,11 +1360,6 @@ main {
                 font-family="'Manrope', system-ui, sans-serif"
                 font-size="13.5" font-weight="400" fill="#ffffff" letter-spacing="0.02em">Intelligence + tech</text>
         </g>
-
-        <!-- Grain overlay — sits above blobs -->
-        <rect width="690" height="620" fill="transparent"
-              filter="url(#svgGrain)"
-              style="mix-blend-mode: screen; opacity: 0; pointer-events: none;"/>
       </svg>
     </div>
   </section>
@@ -1594,18 +1629,10 @@ main {
   if (!svgEl) return;
 
   var blobs = [
-    { el: svgEl.querySelector('#blob-hg'), ox: 345, oy: 196, gr: svgEl.querySelector('#rgHG') },
-    { el: svgEl.querySelector('#blob-ng'), ox: 212, oy: 424, gr: svgEl.querySelector('#rgNG') },
-    { el: svgEl.querySelector('#blob-cg'), ox: 478, oy: 424, gr: svgEl.querySelector('#rgCG') },
+    { el: svgEl.querySelector('#blob-hg'), ox: 345, oy: 196 },
+    { el: svgEl.querySelector('#blob-ng'), ox: 212, oy: 424 },
+    { el: svgEl.querySelector('#blob-cg'), ox: 478, oy: 424 },
   ].filter(function (b) { return b.el; });
-
-  /* Gradient focal-point orbit: each orb's hotspot traces a circle at its
-     own speed and phase, updated every rAF frame for perfectly smooth motion. */
-  var grAnim = [
-    { r: 14, tx: 3.5, ty: 4.2, px: 0.0 },   /* HG — faster, phase 0   */
-    { r: 12, tx: 4.8, ty: 3.1, px: 2.1 },   /* NG — medium, phase 2.1 */
-    { r: 13, tx: 5.6, ty: 4.7, px: 4.4 },   /* CG — slower, phase 4.4 */
-  ];
 
   var REPEL_R   = 270;
   var MAX_PUSH  = 44;
@@ -1614,7 +1641,6 @@ main {
   var mouse = { x: -9999, y: -9999 };
   var curr  = blobs.map(function () { return { x: 0, y: 0 }; });
   var tgt   = blobs.map(function () { return { x: 0, y: 0 }; });
-  var t0    = performance.now();
 
   function toSVG(cx, cy) {
     var r = svgEl.getBoundingClientRect();
@@ -1635,18 +1661,8 @@ main {
 
   function tick() {
     requestAnimationFrame(tick);
-    var t = (performance.now() - t0) / 1000;
 
     blobs.forEach(function (b, i) {
-      /* Smooth gradient focal-point orbit — updated every frame */
-      var ga = grAnim[i];
-      var fx = 50 + ga.r * Math.cos(t / ga.tx + ga.px);
-      var fy = 50 + ga.r * Math.sin(t / ga.ty + ga.px);
-      if (b.gr) {
-        b.gr.setAttribute('fx', fx.toFixed(2) + '%');
-        b.gr.setAttribute('fy', fy.toFixed(2) + '%');
-      }
-
       /* Cursor repulsion */
       var dx   = b.ox - mouse.x;
       var dy   = b.oy - mouse.y;
