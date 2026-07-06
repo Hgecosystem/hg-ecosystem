@@ -189,6 +189,9 @@ main {
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  isolation: isolate;
+  transform: translateZ(0);
+  contain: paint;
 }
 
 /* ─── Gradient mesh background (pastel on light) ───────────────── */
@@ -315,7 +318,7 @@ main {
   width: 150%;
   height: auto;
   display: block;
-  overflow: visible;
+  overflow: hidden;
   pointer-events: none;
   z-index: 1;
 }
@@ -438,29 +441,78 @@ main {
 }
 
 .diagram-wrap {
+  position: relative;
   width: 100%;
   max-width: 640px;
+  aspect-ratio: 690 / 620;
   overflow: visible;
 }
 
-.diagram-wrap svg {
-  display: block;
+/* ─── Div-based orb blobs (CSS blur — GPU-accelerated) ──────────── */
+
+/* Repulsion target. Centered on anchor via negative margins so
+   style.transform is free for the JS cursor-repulsion nudge.
+   margin % is always relative to containing-block WIDTH in CSS. */
+.orb-wrap {
+  position: absolute;
+  width: 61%;          /* 420/690 of the SVG viewBox width */
+  aspect-ratio: 1;
+  margin-left: -30.5%;
+  margin-top: -30.5%;
+  transform: translate(0, 0); /* pre-create compositor layer so JS rAF causes no flash */
+  will-change: transform;
+}
+.orb-wrap--hg { left: 50%;    top: 31.6%; }
+.orb-wrap--ng { left: 30.7%;  top: 68.4%; }
+.orb-wrap--cg { left: 69.3%;  top: 68.4%; }
+
+/* Clips the fill to a circle, then blurs the composited result.
+   CSS blur on a clipped div == GPU-rasterised soft blob. */
+.orb-blur {
   width: 100%;
-  height: auto;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  filter: blur(60px);
+  will-change: filter; /* pre-promote blur layer so filter is ready at first paint */
+  transform: translateZ(0); /* force GPU layer creation before first frame */
 }
 
-/* ─── Blob gradient spin (CSS-animated, GPU-composited) ─────────── */
-.blob-spin {
-  transform-box: fill-box;
-  transform-origin: center;
+/* Granim canvas — fills the clipped circle, blurred by parent .orb-blur.
+   CSS backgrounds show instantly on page load; Granim draws over them once ready. */
+.orb-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
-.blob-spin--hg { animation: blob-cw   8s linear infinite; }
-.blob-spin--ng { animation: blob-ccw 11s linear infinite; }
-.blob-spin--cg { animation: blob-cw  14s linear infinite; }
-@keyframes blob-cw  { to { transform: rotate( 360deg); } }
-@keyframes blob-ccw { to { transform: rotate(-360deg); } }
-@media (prefers-reduced-motion: reduce) {
-  .blob-spin { animation: none !important; }
+#canvas-hg { background: linear-gradient(135deg, #252D64, #3546BC); }
+#canvas-ng { background: linear-gradient(135deg, #59B0AB, #A6D8D5); }
+#canvas-cg { background: linear-gradient(135deg, #220749, #612CAD); }
+
+/* Text labels — sibling of .orb-blur so they are NOT blurred */
+.orb-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  pointer-events: none;
+}
+.orb-name {
+  font-family: 'Manrope', system-ui, sans-serif;
+  font-size: 19px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.01em;
+}
+.orb-sub {
+  font-family: 'Manrope', system-ui, sans-serif;
+  font-size: 13.5px;
+  font-weight: 400;
+  color: #ffffff;
+  letter-spacing: 0.02em;
 }
 
 /* ─── Responsive ───────────────────────────────────────────────── */
@@ -1252,115 +1304,43 @@ main {
       Each capability is specialist in its own right. Together, they form an integrated system that supports the full arc of provider improvement.
     </p>
 
-    <div class="diagram-wrap">
-      <svg viewBox="0 0 690 620" role="img" xmlns="http://www.w3.org/2000/svg"
-           aria-labelledby="diagram-title diagram-desc" style="overflow: visible;">
-        <title id="diagram-title">Health Generation ecosystem diagram</title>
-        <desc id="diagram-desc">Three overlapping soft-glow circles: HealthGen (advisory) at top-centre, NurseGen (workforce) at bottom-left, CareGen (intelligence and technology) at bottom-right.</desc>
-        <defs>
-          <!--
-            Three-stop radial gradients with animated focal point (fx/fy)
-            and center stop-color. fx/fy sweeps the hotspot 50-60% across
-            the circle so the color shift is fully legible.
-            Each circle has independent durations to stay out of phase.
-            calcMode="spline" + same start/end value = seamless sine loop.
-          -->
+    <div class="diagram-wrap"
+         role="img"
+         aria-label="Three overlapping soft-glow orbs: HealthGen (advisory) at top-centre, NurseGen (workforce) at bottom-left, CareGen (intelligence) at bottom-right">
 
-          <!-- Rotating linear color gradients — each orb's inner <g> CSS-spins
-               these so the color sweeps around the orb (GPU-composited, no rAF).
-               gradientUnits="userSpaceOnUse" means the gradient rotates with the
-               parent <g> transform, giving visible direction change each frame. -->
-          <linearGradient id="lgHG" gradientUnits="userSpaceOnUse"
-              x1="197" y1="48" x2="493" y2="344">
-            <stop offset="0%"   stop-color="#3546BC"/>
-            <stop offset="100%" stop-color="#6B75B6"/>
-          </linearGradient>
-          <linearGradient id="lgNG" gradientUnits="userSpaceOnUse"
-              x1="63" y1="275" x2="360" y2="572">
-            <stop offset="0%"   stop-color="#59B0AB"/>
-            <stop offset="100%" stop-color="#A6D8D5"/>
-          </linearGradient>
-          <linearGradient id="lgCG" gradientUnits="userSpaceOnUse"
-              x1="330" y1="275" x2="627" y2="572">
-            <stop offset="0%"   stop-color="#612CAD"/>
-            <stop offset="100%" stop-color="#A37ED8"/>
-          </linearGradient>
+      <!-- HealthGen — blue orb -->
+      <div id="blob-hg" class="orb-wrap orb-wrap--hg">
+        <div class="orb-blur">
+          <canvas id="canvas-hg" class="orb-canvas" style="background:linear-gradient(135deg,#252D64,#3546BC)"></canvas>
+        </div>
+        <div class="orb-label">
+          <span class="orb-name">HealthGen</span>
+          <span class="orb-sub">Advisory + Methodology + Delivery</span>
+        </div>
+      </div>
 
-          <!-- Radial alpha masks — soft centre-to-edge fade for each orb circle -->
-          <radialGradient id="fadeHG" gradientUnits="userSpaceOnUse" cx="345" cy="196" r="210">
-            <stop offset="0%"   stop-color="white" stop-opacity="1"/>
-            <stop offset="50%"  stop-color="white" stop-opacity="1"/>
-            <stop offset="100%" stop-color="white" stop-opacity="0"/>
-          </radialGradient>
-          <mask id="maskHG">
-            <rect x="0" y="0" width="690" height="620" fill="url(#fadeHG)"/>
-          </mask>
-          <radialGradient id="fadeNG" gradientUnits="userSpaceOnUse" cx="212" cy="424" r="210">
-            <stop offset="0%"   stop-color="white" stop-opacity="1"/>
-            <stop offset="50%"  stop-color="white" stop-opacity="1"/>
-            <stop offset="100%" stop-color="white" stop-opacity="0"/>
-          </radialGradient>
-          <mask id="maskNG">
-            <rect x="0" y="0" width="690" height="620" fill="url(#fadeNG)"/>
-          </mask>
-          <radialGradient id="fadeCG" gradientUnits="userSpaceOnUse" cx="478" cy="424" r="210">
-            <stop offset="0%"   stop-color="white" stop-opacity="1"/>
-            <stop offset="50%"  stop-color="white" stop-opacity="1"/>
-            <stop offset="100%" stop-color="white" stop-opacity="0"/>
-          </radialGradient>
-          <mask id="maskCG">
-            <rect x="0" y="0" width="690" height="620" fill="url(#fadeCG)"/>
-          </mask>
+      <!-- NurseGen — teal orb -->
+      <div id="blob-ng" class="orb-wrap orb-wrap--ng">
+        <div class="orb-blur">
+          <canvas id="canvas-ng" class="orb-canvas" style="background:linear-gradient(135deg,#59B0AB,#A6D8D5)"></canvas>
+        </div>
+        <div class="orb-label">
+          <span class="orb-name">NurseGen</span>
+          <span class="orb-sub" style="letter-spacing:0.04em">Workforce</span>
+        </div>
+      </div>
 
-          <!-- Soft gaussian blur — applied to inner spin group for organic glowing edges.
-               Reduced region and stdDeviation from 80%/24 to 40%/18 for faster compositing. -->
-          <filter id="blobBlur" x="-40%" y="-40%" width="180%" height="180%"
-                  filterRes="512" color-interpolation-filters="sRGB">
-            <feGaussianBlur stdDeviation="18"/>
-          </filter>
-        </defs>
+      <!-- CareGen — purple orb -->
+      <div id="blob-cg" class="orb-wrap orb-wrap--cg">
+        <div class="orb-blur">
+          <canvas id="canvas-cg" class="orb-canvas" style="background:linear-gradient(135deg,#220749,#612CAD)"></canvas>
+        </div>
+        <div class="orb-label">
+          <span class="orb-name">CareGen</span>
+          <span class="orb-sub">Intelligence + tech</span>
+        </div>
+      </div>
 
-        <rect width="690" height="620" fill="transparent"/>
-
-        <!-- HealthGen — blue blob + label, grouped for JS repulsion -->
-        <g id="blob-hg">
-          <g class="blob-spin blob-spin--hg" filter="url(#blobBlur)">
-            <circle cx="345" cy="196" r="210" fill="url(#lgHG)" mask="url(#maskHG)"/>
-          </g>
-          <text x="345" y="182" text-anchor="middle" dominant-baseline="central"
-                font-family="'Manrope', system-ui, sans-serif"
-                font-size="19" font-weight="700" fill="#ffffff" letter-spacing="0.01em">HealthGen</text>
-          <text x="345" y="212" text-anchor="middle" dominant-baseline="central"
-                font-family="'Manrope', system-ui, sans-serif"
-                font-size="13.5" font-weight="400" fill="#ffffff" letter-spacing="0.02em">Advisory + Methodology + Delivery</text>
-        </g>
-
-        <!-- NurseGen — teal blob + label -->
-        <g id="blob-ng">
-          <g class="blob-spin blob-spin--ng" filter="url(#blobBlur)">
-            <circle cx="212" cy="424" r="210" fill="url(#lgNG)" mask="url(#maskNG)"/>
-          </g>
-          <text x="212" y="410" text-anchor="middle" dominant-baseline="central"
-                font-family="'Manrope', system-ui, sans-serif"
-                font-size="19" font-weight="700" fill="#ffffff" letter-spacing="0.01em">NurseGen</text>
-          <text x="212" y="438" text-anchor="middle" dominant-baseline="central"
-                font-family="'Manrope', system-ui, sans-serif"
-                font-size="13.5" font-weight="400" fill="#ffffff" letter-spacing="0.04em">Workforce</text>
-        </g>
-
-        <!-- CareGen — two-tone purple blob + label -->
-        <g id="blob-cg">
-          <g class="blob-spin blob-spin--cg" filter="url(#blobBlur)">
-            <circle cx="478" cy="424" r="210" fill="url(#lgCG)" mask="url(#maskCG)"/>
-          </g>
-          <text x="478" y="410" text-anchor="middle" dominant-baseline="central"
-                font-family="'Manrope', system-ui, sans-serif"
-                font-size="19" font-weight="700" fill="#ffffff" letter-spacing="0.01em">CareGen</text>
-          <text x="478" y="438" text-anchor="middle" dominant-baseline="central"
-                font-family="'Manrope', system-ui, sans-serif"
-                font-size="13.5" font-weight="400" fill="#ffffff" letter-spacing="0.02em">Intelligence + tech</text>
-        </g>
-      </svg>
     </div>
   </section>
 
@@ -1617,33 +1597,29 @@ main {
 
 <script>
 (function () {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    var s = document.getElementById('ecosystem');
-    var sv = s && s.querySelector('svg');
-    if (sv && sv.pauseAnimations) sv.pauseAnimations();
-    return;
-  }
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   var section = document.getElementById('ecosystem');
-  var svgEl   = section && section.querySelector('svg');
-  if (!svgEl) return;
+  var stage   = section && section.querySelector('.diagram-wrap');
+  if (!stage) return;
 
   var blobs = [
-    { el: svgEl.querySelector('#blob-hg'), ox: 345, oy: 196 },
-    { el: svgEl.querySelector('#blob-ng'), ox: 212, oy: 424 },
-    { el: svgEl.querySelector('#blob-cg'), ox: 478, oy: 424 },
+    { el: stage.querySelector('#blob-hg'), ox: 345, oy: 196 },
+    { el: stage.querySelector('#blob-ng'), ox: 212, oy: 424 },
+    { el: stage.querySelector('#blob-cg'), ox: 478, oy: 424 },
   ].filter(function (b) { return b.el; });
 
-  var REPEL_R   = 270;
-  var MAX_PUSH  = 44;
-  var LERP      = 0.07;
+  var REPEL_R  = 270;
+  var MAX_PUSH = 44;
+  var LERP     = 0.07;
 
   var mouse = { x: -9999, y: -9999 };
   var curr  = blobs.map(function () { return { x: 0, y: 0 }; });
   var tgt   = blobs.map(function () { return { x: 0, y: 0 }; });
 
-  function toSVG(cx, cy) {
-    var r = svgEl.getBoundingClientRect();
+  /* Map client coords into the 690×620 SVG-space used for orb origins */
+  function toSpace(cx, cy) {
+    var r = stage.getBoundingClientRect();
     return {
       x: (cx - r.left) / r.width  * 690,
       y: (cy - r.top)  / r.height * 620,
@@ -1651,7 +1627,7 @@ main {
   }
 
   section.addEventListener('mousemove', function (e) {
-    var p = toSVG(e.clientX, e.clientY);
+    var p = toSpace(e.clientX, e.clientY);
     mouse.x = p.x; mouse.y = p.y;
   }, { passive: true });
 
@@ -1661,9 +1637,10 @@ main {
 
   function tick() {
     requestAnimationFrame(tick);
+    /* Scale SVG-space push into actual CSS pixels */
+    var scale = stage.offsetWidth / 690;
 
     blobs.forEach(function (b, i) {
-      /* Cursor repulsion */
       var dx   = b.ox - mouse.x;
       var dy   = b.oy - mouse.y;
       var dist = Math.sqrt(dx * dx + dy * dy);
@@ -1681,13 +1658,49 @@ main {
       curr[i].x += (tgt[i].x - curr[i].x) * LERP;
       curr[i].y += (tgt[i].y - curr[i].y) * LERP;
 
-      b.el.setAttribute('transform',
-        'translate(' + curr[i].x.toFixed(2) + ',' + curr[i].y.toFixed(2) + ')');
+      b.el.style.transform =
+        'translate(' + (curr[i].x * scale).toFixed(1) + 'px,' +
+                       (curr[i].y * scale).toFixed(1) + 'px)';
     });
   }
 
   tick();
 })();
+</script>
+
+<!-- Granim.js — canvas-based gradient animation for ecosystem orbs -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/granim/2.0.0/granim.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+window.addEventListener('DOMContentLoaded', function () {
+  if (typeof Granim === 'undefined') return;
+  var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* transitionSpeed = total cycle / 3 gradient pairs (ms) */
+  [
+    { id: 'canvas-hg', speed: Math.round(8000  / 3),
+      colors: [['#252D64','#3546BC'],['#3546BC','#6B75B6'],['#6B75B6','#252D64']] },
+    { id: 'canvas-ng', speed: Math.round(11000 / 3),
+      colors: [['#59B0AB','#A6D8D5'],['#A6D8D5','#1A5C59'],['#1A5C59','#59B0AB']] },
+    { id: 'canvas-cg', speed: Math.round(14000 / 3),
+      colors: [['#220749','#612CAD'],['#612CAD','#A37ED8'],['#A37ED8','#220749']] },
+  ].forEach(function (cfg) {
+    var el = document.getElementById(cfg.id);
+    if (!el) return;
+    var g = new Granim({
+      element: '#' + cfg.id,
+      direction: 'diagonal',
+      isPausedWhenNotInView: true,
+      states: {
+        'default-state': {
+          gradients: cfg.colors,
+          transitionSpeed: reducedMotion ? 99999 : cfg.speed,
+          loop: true,
+        }
+      }
+    });
+    if (reducedMotion) g.pause();
+  });
+});
 </script>
 
 <!-- GSAP + ScrollTrigger — deferred so they download in parallel with parsing -->
