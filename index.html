@@ -1,8 +1,5 @@
 <title>Our Ecosystem — Health Generation</title>
 
-<!-- GSAP + ScrollTrigger (Why Providers pin effect) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <style>
 /* ─── Manrope embedded (variable font, weights 400–600) ───────────── */
@@ -1256,19 +1253,19 @@ main {
           -->
 
           <!-- HealthGen: mid-blue highlight → brand blue → dark navy shadow -->
-          <radialGradient id="rgHG" cx="50%" cy="50%" r="50%">
+          <radialGradient id="rgHG" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
             <stop offset="0%"   stop-color="#3546BC" stop-opacity="1"/>
             <stop offset="50%"  stop-color="#3546BC" stop-opacity="1"/>
             <stop offset="100%" stop-color="#6B75B6" stop-opacity="0"/>
           </radialGradient>
 
-          <radialGradient id="rgNG" cx="50%" cy="50%" r="50%">
+          <radialGradient id="rgNG" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
             <stop offset="0%"   stop-color="#59B0AB" stop-opacity="1"/>
             <stop offset="50%"  stop-color="#59B0AB" stop-opacity="1"/>
             <stop offset="100%" stop-color="#A6D8D5" stop-opacity="0"/>
           </radialGradient>
 
-          <radialGradient id="rgCG" cx="50%" cy="50%" r="50%">
+          <radialGradient id="rgCG" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
             <stop offset="0%"   stop-color="#612CAD" stop-opacity="1"/>
             <stop offset="50%"  stop-color="#612CAD" stop-opacity="1"/>
             <stop offset="100%" stop-color="#A37ED8" stop-opacity="0"/>
@@ -1597,20 +1594,28 @@ main {
   if (!svgEl) return;
 
   var blobs = [
-    { el: svgEl.querySelector('#blob-hg'), ox: 345, oy: 196 },
-    { el: svgEl.querySelector('#blob-ng'), ox: 212, oy: 424 },
-    { el: svgEl.querySelector('#blob-cg'), ox: 478, oy: 424 },
+    { el: svgEl.querySelector('#blob-hg'), ox: 345, oy: 196, gr: svgEl.querySelector('#rgHG') },
+    { el: svgEl.querySelector('#blob-ng'), ox: 212, oy: 424, gr: svgEl.querySelector('#rgNG') },
+    { el: svgEl.querySelector('#blob-cg'), ox: 478, oy: 424, gr: svgEl.querySelector('#rgCG') },
   ].filter(function (b) { return b.el; });
 
-  var REPEL_R   = 270;   /* SVG-unit radius at which repulsion begins     */
-  var MAX_PUSH  = 44;    /* SVG units — max displacement at cursor center  */
-  var LERP      = 0.07;  /* per-frame ease fraction (~fluid spring feel)   */
+  /* Gradient focal-point orbit: each orb's hotspot traces a circle at its
+     own speed and phase, updated every rAF frame for perfectly smooth motion. */
+  var grAnim = [
+    { r: 14, tx: 3.5, ty: 4.2, px: 0.0 },   /* HG — faster, phase 0   */
+    { r: 12, tx: 4.8, ty: 3.1, px: 2.1 },   /* NG — medium, phase 2.1 */
+    { r: 13, tx: 5.6, ty: 4.7, px: 4.4 },   /* CG — slower, phase 4.4 */
+  ];
+
+  var REPEL_R   = 270;
+  var MAX_PUSH  = 44;
+  var LERP      = 0.07;
 
   var mouse = { x: -9999, y: -9999 };
   var curr  = blobs.map(function () { return { x: 0, y: 0 }; });
   var tgt   = blobs.map(function () { return { x: 0, y: 0 }; });
+  var t0    = performance.now();
 
-  /* Map client viewport coords → SVG viewBox coords */
   function toSVG(cx, cy) {
     var r = svgEl.getBoundingClientRect();
     return {
@@ -1619,30 +1624,37 @@ main {
     };
   }
 
-  /* Listen on the whole dark card so repulsion starts before entering SVG */
   section.addEventListener('mousemove', function (e) {
     var p = toSVG(e.clientX, e.clientY);
-    mouse.x = p.x;
-    mouse.y = p.y;
+    mouse.x = p.x; mouse.y = p.y;
   }, { passive: true });
 
   section.addEventListener('mouseleave', function () {
-    mouse.x = -9999;
-    mouse.y = -9999;
+    mouse.x = -9999; mouse.y = -9999;
   }, { passive: true });
 
   function tick() {
     requestAnimationFrame(tick);
+    var t = (performance.now() - t0) / 1000;
 
     blobs.forEach(function (b, i) {
+      /* Smooth gradient focal-point orbit — updated every frame */
+      var ga = grAnim[i];
+      var fx = 50 + ga.r * Math.cos(t / ga.tx + ga.px);
+      var fy = 50 + ga.r * Math.sin(t / ga.ty + ga.px);
+      if (b.gr) {
+        b.gr.setAttribute('fx', fx.toFixed(2) + '%');
+        b.gr.setAttribute('fy', fy.toFixed(2) + '%');
+      }
+
+      /* Cursor repulsion */
       var dx   = b.ox - mouse.x;
       var dy   = b.oy - mouse.y;
       var dist = Math.sqrt(dx * dx + dy * dy);
 
       if (dist < REPEL_R && dist > 0.5) {
-        /* Quadratic falloff: gentle at range, stronger up close */
-        var t    = 1 - dist / REPEL_R;
-        var push = MAX_PUSH * t * t;
+        var tt   = 1 - dist / REPEL_R;
+        var push = MAX_PUSH * tt * tt;
         tgt[i].x = (dx / dist) * push;
         tgt[i].y = (dy / dist) * push;
       } else {
@@ -1650,7 +1662,6 @@ main {
         tgt[i].y = 0;
       }
 
-      /* Lerp current position toward target each frame */
       curr[i].x += (tgt[i].x - curr[i].x) * LERP;
       curr[i].y += (tgt[i].y - curr[i].y) * LERP;
 
@@ -1663,9 +1674,14 @@ main {
 })();
 </script>
 
+<!-- GSAP + ScrollTrigger — deferred so they download in parallel with parsing -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 <script>
 /* ── Why Providers: GSAP ScrollTrigger pin + card reveal ─────────── */
-(function () {
+/* Wrapped in load so it runs after deferred GSAP scripts have executed */
+window.addEventListener('load', function () {
   if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
@@ -1673,23 +1689,21 @@ main {
 
   var cards = gsap.utils.toArray('.why-card');
 
-  /* Timeline scrubbed to scroll — cards animate from below into place */
   var tl = gsap.timeline({
     scrollTrigger: {
       trigger:      '.why-section',
-      start:        'top 92px',   /* section top hits navbar bottom          */
-      end:          '+=680',      /* 680 px of scroll for the full animation */
-      pin:          true,         /* ScrollTrigger inserts the spacer itself  */
-      scrub:        1.4,          /* smooth lag behind pointer                */
-      anticipatePin: 1,           /* pre-calculates pin to avoid jump         */
+      start:        'top 92px',
+      end:          '+=680',
+      pin:          true,
+      scrub:        1.4,
+      anticipatePin: 1,
     }
   });
 
-  /* Card 1 (Expertise) starts lowest — roughly where Workforce sits */
   tl.from(cards[0], { y: 360, ease: 'none', duration: 0.6 }, 0)
     .from(cards[1], { y: 210, ease: 'none', duration: 0.6 }, 0.2)
     .from(cards[2], { y:  80, ease: 'none', duration: 0.6 }, 0.4);
-})();
+});
 </script>
 
 </main>
