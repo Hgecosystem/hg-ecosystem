@@ -271,9 +271,7 @@ main {
 
 .hero-heading {
   font-family: var(--font);
-  font-size: clamp(38px, 5.5vw, 68px);
   font-weight: 700;
-  line-height: 1.08;
   letter-spacing: -0.025em;
   text-wrap: balance;
   margin-bottom: 24px;
@@ -283,8 +281,20 @@ main {
   background-clip: text;
 }
 
-.hero-heading .weight-light {
+.hero-line-1 {
+  display: block;
+  font-size: clamp(44px, 6vw, 80px);
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+}
+
+.hero-line-2 {
+  display: block;
+  font-size: clamp(20px, 2.8vw, 38px);
   font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  margin-top: 6px;
 }
 
 .hero-sub {
@@ -352,7 +362,8 @@ main {
 .btn-secondary {
   background: transparent;
   color: rgba(255,255,255,0.75);
-  padding: 12px 24px 12px 28px;
+  padding: 0 24px 0 28px;
+  height: 46px;
   border: 1.5px solid rgba(255,255,255,0.22);
 }
 .btn-secondary:hover {
@@ -368,6 +379,22 @@ main {
   transition: transform 0.22s ease;
   flex-shrink: 0;
 }
+
+/* ─── Outline pill button (hero primary) ───────────────────────── */
+.btn-outline {
+  background: rgba(255, 255, 255, 0.38);
+  color: #ffffff;
+  padding: 0 24px 0 26px;
+  height: 46px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+.btn-outline:hover {
+  background: rgba(255, 255, 255, 0.50);
+  border-color: rgba(255, 255, 255, 0.68);
+  color: #131734;
+  transform: translateY(-1px);
+}
+.btn-outline:hover .btn-icon { transform: translate(2px, -2px); }
 
 /* ─── Diagram section — dark spotlight card ─────────────────────── */
 .diagram-section {
@@ -1176,8 +1203,8 @@ main {
         <span class="eyebrow">Our Ecosystem</span>
 
         <h1 class="hero-heading">
-          One Ecosystem.<br>
-          <span class="weight-light">Three Specialist Capabilities.</span>
+          <span class="hero-line-1">One Ecosystem.</span>
+          <span class="hero-line-2">Three Specialist Capabilities.</span>
         </h1>
 
         <p class="hero-sub">
@@ -1185,11 +1212,11 @@ main {
         </p>
 
         <div class="btn-row">
-          <a href="#ecosystem" class="btn btn-primary">
+          <a href="#ecosystem" class="btn btn-outline">
             Explore the ecosystem
             <span class="btn-icon" aria-hidden="true">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 12L12 4M12 4H6M12 4V10" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </span>
           </a>
