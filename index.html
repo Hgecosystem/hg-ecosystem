@@ -485,15 +485,25 @@ main {
 .btn-outline:hover .btn-icon { transform: translate(2px, -2px); }
 
 /* ─── Diagram section — dark spotlight card ─────────────────────── */
-.diagram-section {
-  margin: 40px 2.5vw 0;
-  padding: 80px 7% 90px;
-  background: transparent;
-  border: none;
-  border-radius: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+/* ─── Responsive ───────────────────────────────────────────────── */
+@media (max-width: 680px) {
+  .hero-card {
+    padding: 120px 5% 60px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn, .btn-icon { transition: none; }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   SECTIONS 2–4: BUSINESS CAPABILITY CARDS
+   ══════════════════════════════════════════════════════════════════ */
+
+.biz-header {
+  text-align: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  margin-bottom: 48px;
 }
 
 .diagram-label {
@@ -524,106 +534,12 @@ main {
   color: var(--lt-text-3);
   text-align: center;
   max-width: 480px;
-  margin-bottom: 64px;
+  margin: 0 auto;
   line-height: 1.65;
-  text-wrap: pretty;
 }
-
-.diagram-wrap {
-  position: relative;
-  width: 100%;
-  max-width: 640px;
-  aspect-ratio: 690 / 620;
-  overflow: visible;
-}
-
-/* ─── Div-based orb blobs (CSS blur — GPU-accelerated) ──────────── */
-
-/* Repulsion target. Centered on anchor via negative margins so
-   style.transform is free for the JS cursor-repulsion nudge.
-   margin % is always relative to containing-block WIDTH in CSS. */
-.orb-wrap {
-  position: absolute;
-  width: 61%;          /* 420/690 of the SVG viewBox width */
-  aspect-ratio: 1;
-  margin-left: -30.5%;
-  margin-top: -30.5%;
-  transform: translate(0, 0); /* pre-create compositor layer so JS rAF causes no flash */
-  will-change: transform;
-}
-.orb-wrap--hg { left: 50%;    top: 31.6%; }
-.orb-wrap--ng { left: 30.7%;  top: 68.4%; }
-.orb-wrap--cg { left: 69.3%;  top: 68.4%; }
-
-/* Clips the fill to a circle, then blurs the composited result.
-   CSS blur on a clipped div == GPU-rasterised soft blob. */
-.orb-blur {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  overflow: hidden;
-  filter: blur(60px);
-  will-change: filter; /* pre-promote blur layer so filter is ready at first paint */
-  transform: translateZ(0); /* force GPU layer creation before first frame */
-}
-
-/* Granim canvas — fills the clipped circle, blurred by parent .orb-blur.
-   CSS backgrounds show instantly on page load; Granim draws over them once ready. */
-.orb-canvas {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-#canvas-hg { background: linear-gradient(135deg, #252D64, #3546BC); }
-#canvas-ng { background: linear-gradient(135deg, #59B0AB, #A6D8D5); }
-#canvas-cg { background: linear-gradient(135deg, #220749, #612CAD); }
-
-/* Text labels — sibling of .orb-blur so they are NOT blurred */
-.orb-label {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  pointer-events: none;
-}
-.orb-name {
-  font-family: 'Manrope', system-ui, sans-serif;
-  font-size: clamp(22px, 2.2vw, 28px);
-  font-weight: 700;
-  color: #ffffff;
-  letter-spacing: -0.02em;
-}
-.orb-sub {
-  font-family: 'Manrope', system-ui, sans-serif;
-  font-size: 13.5px;
-  font-weight: 400;
-  color: #ffffff;
-  letter-spacing: 0.02em;
-}
-
-/* ─── Responsive ───────────────────────────────────────────────── */
-@media (max-width: 680px) {
-  .hero-card {
-    padding: 120px 5% 60px;
-  }
-  .diagram-section {
-    margin: 30px 3vw 0;
-    padding: 60px 6% 70px;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .btn, .btn-icon { transition: none; }
-}
-
-/* ══════════════════════════════════════════════════════════════════
-   SECTIONS 2–4: BUSINESS CAPABILITY CARDS
-   ══════════════════════════════════════════════════════════════════ */
 
 .biz-wrap {
-  padding: 40px 2.5vw 0;
+  padding: 80px 2.5vw 40px;
   position: relative;
   z-index: 1;
 }
@@ -1679,57 +1595,13 @@ main {
     </div>
   </section>
 
-  <!-- ═══ ECOSYSTEM DIAGRAM — dark spotlight card ════════════════════ -->
-  <section class="diagram-section" id="ecosystem" aria-label="Ecosystem diagram">
-    <p class="diagram-label">Three capabilities. One direction.</p>
-    <h2 class="diagram-heading">Built to work as one</h2>
-    <p class="diagram-sub">
-      Each capability is specialist in its own right. Together, they form an integrated system that supports the full arc of provider improvement.
-    </p>
-
-    <div class="diagram-wrap"
-         role="img"
-         aria-label="Three overlapping soft-glow orbs: HealthGen (advisory) at top-centre, NurseGen (workforce) at bottom-left, CareGen (intelligence) at bottom-right">
-
-      <!-- HealthGen — blue orb -->
-      <div id="blob-hg" class="orb-wrap orb-wrap--hg">
-        <div class="orb-blur">
-          <canvas id="canvas-hg" class="orb-canvas" style="background:linear-gradient(135deg,#252D64,#3546BC)"></canvas>
-        </div>
-        <div class="orb-label">
-          <span class="orb-name">HealthGen</span>
-          <span class="orb-sub">Advisory + Methodology + Delivery</span>
-        </div>
-      </div>
-
-      <!-- NurseGen — teal orb -->
-      <div id="blob-ng" class="orb-wrap orb-wrap--ng">
-        <div class="orb-blur">
-          <canvas id="canvas-ng" class="orb-canvas" style="background:linear-gradient(135deg,#59B0AB,#A6D8D5)"></canvas>
-        </div>
-        <div class="orb-label">
-          <span class="orb-name">NurseGen</span>
-          <span class="orb-sub" style="letter-spacing:0.04em">Workforce</span>
-        </div>
-      </div>
-
-      <!-- CareGen — purple orb -->
-      <div id="blob-cg" class="orb-wrap orb-wrap--cg">
-        <div class="orb-blur">
-          <canvas id="canvas-cg" class="orb-canvas" style="background:linear-gradient(135deg,#220749,#612CAD)"></canvas>
-        </div>
-        <div class="orb-label">
-          <span class="orb-name">CareGen</span>
-          <span class="orb-sub">Intelligence + tech</span>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-
   <!-- ═══ SECTIONS 2–4: BUSINESS CAPABILITIES ═══════════════════════ -->
   <section class="biz-wrap" aria-label="Business capabilities">
+    <div class="biz-header">
+      <p class="diagram-label">Our Purpose</p>
+      <h2 class="diagram-heading">Better Outcomes for Older Persons</h2>
+      <p class="diagram-sub">Each capability is specialist in its own right. Together, they form an integrated system that supports the full arc of provider improvement.</p>
+    </div>
     <div class="biz-grid">
 
       <!-- ── HealthGen ── -->
@@ -1742,9 +1614,9 @@ main {
                   stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
-        <p class="biz-eyebrow">Advisory and Performance Solutions</p>
+        <p class="biz-eyebrow">Strategy. Advice. Transformation.</p>
         <h2 class="biz-heading">HealthGen</h2>
-        <p class="biz-desc">HealthGen provides strategic advisory, funding optimisation and quality improvement services across aged care, home care and retirement living.</p>
+        <p class="biz-desc">Expert advisory and managed services that strengthen governance, improve performance, optimise funding and drive sustainable organisational change.</p>
         <ul class="biz-services" aria-label="HealthGen services">
           <li>Registration Readiness</li>
           <li>Governance &amp; Clinical Assurance</li>
@@ -1775,9 +1647,9 @@ main {
                   stroke-linecap="round" fill="none"/>
           </svg>
         </div>
-        <p class="biz-eyebrow">Workforce Solutions</p>
+        <p class="biz-eyebrow">People. Clinicians. Capability.</p>
         <h2 class="biz-heading">NurseGen</h2>
-        <p class="biz-desc">NurseGen provides scalable workforce capability to help providers access and deploy skilled clinical resources.</p>
+        <p class="biz-desc">Access to experienced aged care clinicians and leaders who deliver quality care, build capability and support providers when and where they need it.</p>
         <ul class="biz-services" aria-label="NurseGen services">
           <li>Registered Nurse Recruitment</li>
           <li>Care Staff Recruitment</li>
@@ -1810,9 +1682,9 @@ main {
             <line x1="19" y1="18.8" x2="14.8" y2="14.5" stroke="#F5B533" stroke-width="1.3" opacity="0.7"/>
           </svg>
         </div>
-        <p class="biz-eyebrow">Intelligence and Predictive Care</p>
+        <p class="biz-eyebrow">Intelligence. Insight. Impact.</p>
         <h2 class="biz-heading">CareGen</h2>
-        <p class="biz-desc">CareGen combines data, technology and AI-driven intelligence to support proactive care and operational excellence.</p>
+        <p class="biz-desc">Purpose-built technology and AI-driven intelligence that turns data into clarity, enabling better decisions, earlier intervention and stronger outcomes.</p>
         <ul class="biz-services" aria-label="CareGen services">
           <li>CareGen Intelligence</li>
           <li>Predictive Risk Monitoring</li>
@@ -1964,113 +1836,6 @@ main {
 
 
 
-<script>
-(function () {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-  var section = document.getElementById('ecosystem');
-  var stage   = section && section.querySelector('.diagram-wrap');
-  if (!stage) return;
-
-  var blobs = [
-    { el: stage.querySelector('#blob-hg'), ox: 345, oy: 196 },
-    { el: stage.querySelector('#blob-ng'), ox: 212, oy: 424 },
-    { el: stage.querySelector('#blob-cg'), ox: 478, oy: 424 },
-  ].filter(function (b) { return b.el; });
-
-  var REPEL_R  = 270;
-  var MAX_PUSH = 44;
-  var LERP     = 0.07;
-
-  var mouse = { x: -9999, y: -9999 };
-  var curr  = blobs.map(function () { return { x: 0, y: 0 }; });
-  var tgt   = blobs.map(function () { return { x: 0, y: 0 }; });
-
-  /* Map client coords into the 690×620 SVG-space used for orb origins */
-  function toSpace(cx, cy) {
-    var r = stage.getBoundingClientRect();
-    return {
-      x: (cx - r.left) / r.width  * 690,
-      y: (cy - r.top)  / r.height * 620,
-    };
-  }
-
-  section.addEventListener('mousemove', function (e) {
-    var p = toSpace(e.clientX, e.clientY);
-    mouse.x = p.x; mouse.y = p.y;
-  }, { passive: true });
-
-  section.addEventListener('mouseleave', function () {
-    mouse.x = -9999; mouse.y = -9999;
-  }, { passive: true });
-
-  function tick() {
-    requestAnimationFrame(tick);
-    /* Scale SVG-space push into actual CSS pixels */
-    var scale = stage.offsetWidth / 690;
-
-    blobs.forEach(function (b, i) {
-      var dx   = b.ox - mouse.x;
-      var dy   = b.oy - mouse.y;
-      var dist = Math.sqrt(dx * dx + dy * dy);
-
-      if (dist < REPEL_R && dist > 0.5) {
-        var tt   = 1 - dist / REPEL_R;
-        var push = MAX_PUSH * tt * tt;
-        tgt[i].x = (dx / dist) * push;
-        tgt[i].y = (dy / dist) * push;
-      } else {
-        tgt[i].x = 0;
-        tgt[i].y = 0;
-      }
-
-      curr[i].x += (tgt[i].x - curr[i].x) * LERP;
-      curr[i].y += (tgt[i].y - curr[i].y) * LERP;
-
-      b.el.style.transform =
-        'translate(' + (curr[i].x * scale).toFixed(1) + 'px,' +
-                       (curr[i].y * scale).toFixed(1) + 'px)';
-    });
-  }
-
-  tick();
-})();
-</script>
-
-<!-- Granim.js — canvas-based gradient animation for ecosystem orbs -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/granim/2.0.0/granim.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script>
-window.addEventListener('DOMContentLoaded', function () {
-  if (typeof Granim === 'undefined') return;
-  var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  /* transitionSpeed = total cycle / 3 gradient pairs (ms) */
-  [
-    { id: 'canvas-hg', speed: Math.round(8000  / 3),
-      colors: [['#252D64','#3546BC'],['#3546BC','#6B75B6'],['#6B75B6','#252D64']] },
-    { id: 'canvas-ng', speed: Math.round(11000 / 3),
-      colors: [['#59B0AB','#A6D8D5'],['#A6D8D5','#1A5C59'],['#1A5C59','#59B0AB']] },
-    { id: 'canvas-cg', speed: Math.round(14000 / 3),
-      colors: [['#220749','#612CAD'],['#612CAD','#A37ED8'],['#A37ED8','#220749']] },
-  ].forEach(function (cfg) {
-    var el = document.getElementById(cfg.id);
-    if (!el) return;
-    var g = new Granim({
-      element: '#' + cfg.id,
-      direction: 'diagonal',
-      isPausedWhenNotInView: true,
-      states: {
-        'default-state': {
-          gradients: cfg.colors,
-          transitionSpeed: reducedMotion ? 99999 : cfg.speed,
-          loop: true,
-        }
-      }
-    });
-    if (reducedMotion) g.pause();
-  });
-});
-</script>
 
 <!-- GSAP + ScrollTrigger — deferred so they download in parallel with parsing -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer crossorigin="anonymous" referrerpolicy="no-referrer"></script>
