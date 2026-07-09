@@ -200,6 +200,13 @@ main {
   z-index: 0;
   overflow: hidden;
 }
+.hero-bg-parallax {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  bottom: -25%;       /* extra coverage so image never shows empty space as it translates up */
+  will-change: transform;
+  transform: translateZ(0);
+}
 .hero-bg-img {
   position: absolute;
   inset: -4%;
@@ -210,6 +217,7 @@ main {
   background-position: center;
   animation: hero-breathe 12s ease-in-out infinite alternate;
   will-change: transform;
+  transform: translateZ(0);
 }
 @keyframes hero-breathe {
   from { transform: scale(1); }
@@ -1384,9 +1392,11 @@ main {
   <section class="hero-wrap" aria-label="Hero">
     <div class="hero-card">
 
-      <!-- Background image with breathing animation -->
+      <!-- Background image with breathing animation + parallax wrapper -->
       <div class="hero-bg" aria-hidden="true">
-        <div class="hero-bg-img"></div>
+        <div class="hero-bg-parallax">
+          <div class="hero-bg-img"></div>
+        </div>
         <div class="hero-overlay"></div>
       </div>
 
@@ -1851,6 +1861,24 @@ main {
 
 
 
+
+<!-- Hero parallax scroll effect -->
+<script>
+(function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var el = document.querySelector('.hero-bg-parallax');
+  if (!el) return;
+  var ticking = false;
+  window.addEventListener('scroll', function () {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function () {
+      el.style.transform = 'translateZ(0) translateY(-' + (window.scrollY * 0.4).toFixed(1) + 'px)';
+      ticking = false;
+    });
+  }, { passive: true });
+})();
+</script>
 
 <!-- GSAP + ScrollTrigger — deferred so they download in parallel with parsing -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer crossorigin="anonymous" referrerpolicy="no-referrer"></script>
