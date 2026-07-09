@@ -1023,6 +1023,158 @@ main {
 }
 
 /* ══════════════════════════════════════════════════════════════════
+   SECTION: ECOSYSTEM OVERVIEW — wave bg, dark overlay, single column
+   ══════════════════════════════════════════════════════════════════ */
+
+.eco-wrap {
+  margin: 40px 2.5vw 0;
+}
+
+.eco-card {
+  position: relative;
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  padding: 96px 8% 104px;
+}
+
+.eco-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('images/wave-bg.jpg?v=2');
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+}
+
+.eco-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(36, 48, 108, 0.75);
+  z-index: 1;
+}
+
+.eco-inner {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+
+.eco-left {}
+
+.eco-label {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 28px;
+}
+
+.eco-heading {
+  font-family: var(--font);
+  font-size: clamp(28px, 3.2vw, 48px);
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  margin-bottom: 20px;
+  text-wrap: balance;
+}
+
+.eco-sub {
+  font-size: clamp(16px, 1.4vw, 18px);
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.4;
+  margin-bottom: 20px;
+}
+
+.eco-body {
+  font-size: clamp(14px, 1.2vw, 16px);
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.72;
+  margin-bottom: 40px;
+  text-wrap: pretty;
+}
+
+/* Right column — stats */
+.eco-right {}
+
+.eco-glance-label {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 32px;
+}
+
+.eco-stat {
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  padding-top: 24px;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.eco-stat-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.eco-stat-top {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 6px;
+}
+
+.eco-stat-num {
+  font-family: var(--font);
+  font-size: clamp(40px, 4.5vw, 60px);
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.eco-stat-name {
+  font-size: clamp(15px, 1.3vw, 17px);
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.3;
+}
+
+.eco-stat-desc {
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.6;
+}
+
+.eco-stat-icon-wrap {
+  width: 52px;
+  height: 52px;
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 860px) {
+  .eco-inner { grid-template-columns: 1fr; gap: 56px; }
+}
+
+/* ══════════════════════════════════════════════════════════════════
    SECTION 6: HOW IT WORKS
    ══════════════════════════════════════════════════════════════════ */
 
@@ -1606,6 +1758,89 @@ main {
 
       </div><!-- /cap-grid -->
     </div><!-- /cap-panel -->
+  </section>
+
+  <!-- ═══ ECOSYSTEM OVERVIEW — wave bg, dark, single column ══════════ -->
+  <section class="eco-wrap" aria-label="The Health Generation Ecosystem">
+    <div class="eco-card">
+      <div class="eco-bg" aria-hidden="true"></div>
+      <div class="eco-overlay" aria-hidden="true"></div>
+      <div class="eco-inner">
+
+        <!-- Left column -->
+        <div class="eco-left">
+          <p class="eco-label">The Health Generation Ecosystem</p>
+          <h2 class="eco-heading">Three specialist businesses. Six integrated capabilities.</h2>
+          <p class="eco-sub">One partner for every stage of aged care transformation.</p>
+          <p class="eco-body">The Health Generation Ecosystem brings together advisory expertise, clinical workforce and intelligent technology to help aged care providers achieve excellence today and build capability for tomorrow.</p>
+          <a href="#ecosystem" class="btn btn-secondary">
+            Explore the Ecosystem
+            <span class="btn-icon" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          </a>
+        </div>
+
+        <!-- Right column — stats -->
+        <div class="eco-right">
+          <p class="eco-glance-label">Ecosystem at a Glance</p>
+
+          <div class="eco-stat">
+            <div class="eco-stat-icon-wrap" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="9" cy="7" r="3" stroke="white" stroke-width="1.6" fill="none"/>
+                <path d="M3 21c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="white" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+                <circle cx="17" cy="7" r="2.5" stroke="white" stroke-width="1.4" fill="none" opacity="0.7"/>
+                <path d="M21 21c0-2.8-1.8-5.1-4-5.8" stroke="white" stroke-width="1.4" stroke-linecap="round" fill="none" opacity="0.7"/>
+              </svg>
+            </div>
+            <div class="eco-stat-text">
+              <div class="eco-stat-top">
+                <span class="eco-stat-num">3</span>
+                <span class="eco-stat-name">Specialist Businesses</span>
+              </div>
+              <p class="eco-stat-desc">Working as one, seamlessly integrated.</p>
+            </div>
+          </div>
+
+          <div class="eco-stat">
+            <div class="eco-stat-icon-wrap" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3" y="3" width="7" height="7" rx="1.5" stroke="white" stroke-width="1.6" fill="none"/>
+                <rect x="14" y="3" width="7" height="7" rx="1.5" stroke="white" stroke-width="1.6" fill="none"/>
+                <rect x="3" y="14" width="7" height="7" rx="1.5" stroke="white" stroke-width="1.6" fill="none"/>
+                <rect x="14" y="14" width="7" height="7" rx="1.5" stroke="white" stroke-width="1.6" fill="none"/>
+              </svg>
+            </div>
+            <div class="eco-stat-text">
+              <div class="eco-stat-top">
+                <span class="eco-stat-num">6</span>
+                <span class="eco-stat-name">Integrated Capabilities</span>
+              </div>
+              <p class="eco-stat-desc">Covering every critical area of aged care performance.</p>
+            </div>
+          </div>
+
+          <div class="eco-stat">
+            <div class="eco-stat-icon-wrap" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="9" stroke="white" stroke-width="1.6" fill="none"/>
+                <circle cx="12" cy="12" r="5" stroke="white" stroke-width="1.4" fill="none" opacity="0.7"/>
+                <circle cx="12" cy="12" r="1.8" fill="white"/>
+              </svg>
+            </div>
+            <div class="eco-stat-text">
+              <div class="eco-stat-top">
+                <span class="eco-stat-num">1</span>
+                <span class="eco-stat-name">Shared Outcome</span>
+              </div>
+              <p class="eco-stat-desc">Better outcomes and quality of life for Older Persons.</p>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /eco-inner -->
+    </div>
   </section>
 
   <!-- ═══ ECOSYSTEM DIAGRAM — dark spotlight card ════════════════════ -->
