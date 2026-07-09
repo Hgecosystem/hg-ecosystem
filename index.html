@@ -1055,7 +1055,7 @@ main {
 }
 
 /* ══════════════════════════════════════════════════════════════════
-   SECTION 6: HOW IT WORKS
+   SECTION: OUR FOUNDATION
    ══════════════════════════════════════════════════════════════════ */
 
 .how-wrap {
@@ -1091,7 +1091,7 @@ main {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 0 24px;
+  padding: 0 8px;
 }
 
 .how-num {
@@ -1099,47 +1099,46 @@ main {
   border-radius: 50%;
   background: var(--a2);
   color: #fff;
-  font-size: 18px;
-  font-weight: 700;
-  font-family: var(--font);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 22px;
+  margin-bottom: 14px;
   flex-shrink: 0;
   box-shadow: 0 4px 18px rgba(53, 70, 188, 0.32);
 }
-
-.how-step-label {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--a3);
-  margin-bottom: 7px;
+.how-num svg {
+  width: 22px; height: 22px;
+  stroke: #fff;
+  fill: none;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .how-step-title {
-  font-size: 17px;
+  font-size: 15px;
   font-weight: 700;
   color: var(--lt-text-1);
-  margin-bottom: 10px;
   letter-spacing: -0.01em;
-}
-
-.how-step-body {
-  font-size: 14px;
-  color: var(--lt-text-3);
-  line-height: 1.65;
 }
 
 .how-arrow {
   display: flex;
   align-items: center;
-  padding-top: 16px;   /* visually aligns with center of number circle */
+  padding-top: 16px;
   color: var(--a4);
   opacity: 0.55;
   flex-shrink: 0;
+}
+
+@media (max-width: 780px) {
+  .how-steps {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .how-arrow { transform: rotate(90deg); padding-top: 0; padding: 4px 0; }
+  .how-step  { padding: 0 12px; }
 }
 
 /* ══════════════════════════════════════════════════════════════════
@@ -1250,13 +1249,6 @@ main {
   .biz-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 780px) {
-  .how-steps {
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-  }
-  .how-arrow { transform: rotate(90deg); padding-top: 0; padding: 4px 0; }
-  .how-step  { padding: 0 12px; }
   .cta-card  { padding: 64px 6% 72px; }
 }
 
@@ -1842,52 +1834,112 @@ main {
     </div>
   </section>
 
-  <!-- ═══ SECTION: SIX INTEGRATED CAPABILITIES ══════════════════════ -->
-  <!-- ═══ SECTION 6: HOW IT WORKS ════════════════════════════════════ -->
-  <section class="how-wrap" aria-label="How it works">
+  <!-- ═══ SECTION: OUR FOUNDATION ════════════════════════════════════ -->
+  <section class="how-wrap" aria-label="Our Foundation">
     <div class="how-inner">
       <div class="how-header">
-        <p class="section-eyebrow">The Process</p>
-        <h2 class="section-heading">How It Works</h2>
-        <p class="section-sub">A clear path from insight to sustained improvement.</p>
+        <p class="section-eyebrow">Our Foundation</p>
+        <h2 class="section-heading">Our Foundation</h2>
       </div>
       <div class="how-steps">
-
+        <!-- Methodology: book -->
         <div class="how-step">
-          <div class="how-num" aria-hidden="true">1</div>
-          <p class="how-step-label">Understand</p>
-          <h3 class="how-step-title">Understand</h3>
-          <p class="how-step-body">Identify opportunities and risks.</p>
+          <div class="how-num" aria-hidden="true">
+            <svg viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 3h6a2 2 0 0 1 2 2v13a1 1 0 0 0-1-1H4V3z"/>
+              <path d="M18 3h-6a2 2 0 0 0-2 2v13a1 1 0 0 1 1-1h7V3z"/>
+            </svg>
+          </div>
+          <h3 class="how-step-title">Methodology</h3>
         </div>
-
         <div class="how-arrow" aria-hidden="true">
-          <svg width="32" height="20" viewBox="0 0 32 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 10h28M20 2l10 8-10 8" stroke="currentColor" stroke-width="1.8"
-                  stroke-linecap="round" stroke-linejoin="round"/>
+          <svg width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 7h16M10 1l8 6-8 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
-
+        <!-- Data & AI: chip -->
         <div class="how-step">
-          <div class="how-num" aria-hidden="true">2</div>
-          <p class="how-step-label">Optimise</p>
-          <h3 class="how-step-title">Optimise</h3>
-          <p class="how-step-body">Deploy advisory, workforce and intelligence solutions.</p>
+          <div class="how-num" aria-hidden="true">
+            <svg viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+              <rect x="7" y="7" width="8" height="8" rx="1.5"/>
+              <line x1="11" y1="2" x2="11" y2="6"/>
+              <line x1="11" y1="16" x2="11" y2="20"/>
+              <line x1="2" y1="11" x2="6" y2="11"/>
+              <line x1="16" y1="11" x2="20" y2="11"/>
+              <line x1="7" y1="2" x2="7" y2="5"/>
+              <line x1="15" y1="2" x2="15" y2="5"/>
+              <line x1="7" y1="17" x2="7" y2="20"/>
+              <line x1="15" y1="17" x2="15" y2="20"/>
+              <line x1="2" y1="7" x2="5" y2="7"/>
+              <line x1="2" y1="15" x2="5" y2="15"/>
+              <line x1="17" y1="7" x2="20" y2="7"/>
+              <line x1="17" y1="15" x2="20" y2="15"/>
+            </svg>
+          </div>
+          <h3 class="how-step-title">Data &amp; AI</h3>
         </div>
-
         <div class="how-arrow" aria-hidden="true">
-          <svg width="32" height="20" viewBox="0 0 32 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 10h28M20 2l10 8-10 8" stroke="currentColor" stroke-width="1.8"
-                  stroke-linecap="round" stroke-linejoin="round"/>
+          <svg width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 7h16M10 1l8 6-8 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
-
+        <!-- Compliance: shield + check -->
         <div class="how-step">
-          <div class="how-num" aria-hidden="true">3</div>
-          <p class="how-step-label">Sustain</p>
-          <h3 class="how-step-title">Sustain</h3>
-          <p class="how-step-body">Maintain outcomes through ongoing support and technology.</p>
+          <div class="how-num" aria-hidden="true">
+            <svg viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+              <path d="M11 2L3 5.5v5c0 4.4 3.4 8.1 8 9 4.6-.9 8-4.6 8-9v-5L11 2z"/>
+              <polyline points="7.5,11 10,13.5 14.5,8.5"/>
+            </svg>
+          </div>
+          <h3 class="how-step-title">Compliance</h3>
         </div>
-
+        <div class="how-arrow" aria-hidden="true">
+          <svg width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 7h16M10 1l8 6-8 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <!-- Partnerships: handshake -->
+        <div class="how-step">
+          <div class="how-num" aria-hidden="true">
+            <svg viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2 13l3.5 3.5 2-1.5 3 2.5 3-1.5 2 1 3.5-3.5"/>
+              <path d="M2 9l3-3h3l2.5 2.5 2.5-2.5H16l3 3"/>
+              <line x1="7.5" y1="9.5" x2="11" y2="13"/>
+              <line x1="11" y1="9.5" x2="14" y2="12.5"/>
+            </svg>
+          </div>
+          <h3 class="how-step-title">Partnerships</h3>
+        </div>
+        <div class="how-arrow" aria-hidden="true">
+          <svg width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 7h16M10 1l8 6-8 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <!-- National Reach: map pin -->
+        <div class="how-step">
+          <div class="how-num" aria-hidden="true">
+            <svg viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+              <path d="M11 2a6 6 0 0 1 6 6c0 4-6 12-6 12S5 12 5 8a6 6 0 0 1 6-6z"/>
+              <circle cx="11" cy="8" r="2" fill="#fff" stroke="#fff" stroke-width="0"/>
+            </svg>
+          </div>
+          <h3 class="how-step-title">National Reach</h3>
+        </div>
+        <div class="how-arrow" aria-hidden="true">
+          <svg width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 7h16M10 1l8 6-8 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <!-- Continuous Improvement: refresh arrows -->
+        <div class="how-step">
+          <div class="how-num" aria-hidden="true">
+            <svg viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 11a9 9 0 1 1-2.3-6.1"/>
+              <polyline points="15,2 20,5 17,10"/>
+            </svg>
+          </div>
+          <h3 class="how-step-title">Continuous Improvement</h3>
+        </div>
       </div>
     </div>
   </section>
