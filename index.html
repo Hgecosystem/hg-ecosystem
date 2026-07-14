@@ -1348,6 +1348,19 @@ main {
   .site-footer { margin: 0 16px 20px; padding: 32px 6% 24px; }
   .footer-top { flex-direction: column; gap: 16px; align-items: flex-start; }
 }
+/* ── Capability card scroll entrance ── */
+.cap-card {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+.cap-card.cap-card--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .cap-card { opacity: 1; transform: none; transition: none; }
+}
 </style>
 
 <!-- ── Fixed background layer: edge color blooms ─────────────────── -->
@@ -1868,6 +1881,30 @@ window.addEventListener('load', function () {
   gsap.registerPlugin(ScrollTrigger);
 
 });
+</script>
+
+<script>
+(function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var cards = document.querySelectorAll('.cap-card');
+  if (!cards.length) return;
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        var card = entry.target;
+        var delay = parseFloat(card.dataset.capDelay) || 0;
+        setTimeout(function () {
+          card.classList.add('cap-card--visible');
+        }, delay);
+        observer.unobserve(card);
+      }
+    });
+  }, { threshold: 0.15 });
+  cards.forEach(function (card, i) {
+    card.dataset.capDelay = i * 100;
+    observer.observe(card);
+  });
+})();
 </script>
 
 </main>
