@@ -561,13 +561,13 @@ main {
 
 /* ── Individual card gradients ── */
 .biz-card--hg {
-  background: linear-gradient(148deg, #131734 0%, #1c2455 100%);
+  background: #252D64;
 }
 .biz-card--ng {
-  background: linear-gradient(148deg, #072b52 0%, #0d5b6a 100%);
+  background: #59B0AB;
 }
 .biz-card--cg {
-  background: linear-gradient(148deg, #1a0838 0%, #4a127a 100%);
+  background: linear-gradient(135deg, #050025 0%, #612CAD 100%);
 }
 
 /* Subtle inner highlight on each card top edge */
@@ -591,7 +591,7 @@ main {
   flex-shrink: 0;
 }
 .biz-card--hg .biz-icon { background: rgba(53, 70, 188, 0.22); }
-.biz-card--ng .biz-icon { background: rgba(89, 176, 171, 0.22); }
+.biz-card--ng .biz-icon { background: rgba(255, 255, 255, 0.20); }
 .biz-card--cg .biz-icon { background: rgba(245, 181, 51, 0.18); }
 
 /* ── Eyebrow tagline ── */
@@ -603,8 +603,11 @@ main {
   margin-bottom: 8px;
 }
 .biz-card--hg .biz-eyebrow { color: var(--a4); }
-.biz-card--ng .biz-eyebrow { color: var(--teal); }
+.biz-card--ng .biz-eyebrow { color: rgba(255,255,255,0.80); }
 .biz-card--cg .biz-eyebrow { color: var(--amber); }
+.biz-card--ng .biz-heading { color: #ffffff; }
+.biz-card--ng .biz-desc { color: rgba(255,255,255,0.82); }
+.biz-card--ng .biz-services li { color: rgba(255,255,255,0.70); }
 
 /* ── Company name heading ── */
 .biz-heading {
@@ -651,7 +654,7 @@ main {
   margin-top: 5px;
 }
 .biz-card--hg .biz-services li::before { background: var(--a4); }
-.biz-card--ng .biz-services li::before { background: var(--teal); }
+.biz-card--ng .biz-services li::before { background: rgba(255,255,255,0.70); }
 .biz-card--cg .biz-services li::before { background: var(--amber); }
 
 /* ── Card CTA button ── */
@@ -683,13 +686,13 @@ main {
 }
 
 .biz-card--ng .btn-card {
-  background: rgba(89, 176, 171, 0.16);
-  color: var(--teal);
-  border: 1px solid rgba(89, 176, 171, 0.38);
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.38);
 }
 .biz-card--ng .btn-card:hover {
-  background: rgba(89, 176, 171, 0.30);
-  box-shadow: 0 4px 20px rgba(89,176,171,0.20);
+  background: rgba(255, 255, 255, 0.28);
+  box-shadow: 0 4px 20px rgba(255,255,255,0.15);
 }
 
 .biz-card--cg .btn-card {
@@ -1652,11 +1655,11 @@ main {
       <div class="biz-card biz-card--ng">
         <div class="biz-icon" aria-hidden="true">
           <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="9.5" cy="8.5" r="3.5" stroke="#59B0AB" stroke-width="1.8" fill="none"/>
-            <circle cx="17.5" cy="8.5" r="3.5" stroke="#59B0AB" stroke-width="1.8" fill="none"/>
-            <path d="M2 22c0-4 3.36-7 7.5-7s7.5 3 7.5 7" stroke="#59B0AB" stroke-width="1.8"
+            <circle cx="9.5" cy="8.5" r="3.5" stroke="#ffffff" stroke-width="1.8" fill="none"/>
+            <circle cx="17.5" cy="8.5" r="3.5" stroke="#ffffff" stroke-width="1.8" fill="none"/>
+            <path d="M2 22c0-4 3.36-7 7.5-7s7.5 3 7.5 7" stroke="#ffffff" stroke-width="1.8"
                   stroke-linecap="round" fill="none"/>
-            <path d="M18.5 15c2.5.8 4.5 3.1 4.5 7" stroke="#59B0AB" stroke-width="1.8"
+            <path d="M18.5 15c2.5.8 4.5 3.1 4.5 7" stroke="#ffffff" stroke-width="1.8"
                   stroke-linecap="round" fill="none"/>
           </svg>
         </div>
