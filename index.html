@@ -212,7 +212,7 @@ main {
   inset: -4%;
   width: 108%;
   height: 108%;
-  background-image: url('images/HG_Ecosystem_Hero_Section.png');
+  background-image: url('images/HG_Ecosystem_Hero_Section2.jpg?v=2');
   background-size: cover;
   background-position: center;
   animation: hero-breathe 12s ease-in-out infinite alternate;
@@ -226,7 +226,7 @@ main {
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(10, 12, 40, 0.45);
+  background: rgba(10, 12, 40, 0.05);
 }
 
 /* ── Content layer ── */
@@ -377,19 +377,7 @@ main {
 }
 
 /* Brand pills */
-.hero-pill {
-  display: inline-block;
-  font-family: var(--font);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  color: #fff;
-  border-radius: 100px;
-  padding: 5px 16px;
-}
-.hero-pill--hg { background: #E05A5A; }
-.hero-pill--ng { background: #3A9E96; }
-.hero-pill--cg { background: linear-gradient(90deg, #7B3FBE, #C97B2A); }
+
 
 /* ── Entrance animations ── */
 @keyframes hero-fade-up {
@@ -1419,17 +1407,14 @@ main {
       <!-- Brand circles — absolutely positioned on the ring system -->
       <a href="#healthgen" class="hero-circle hero-circle--hg" aria-label="HealthGen — Strategy">
         <img src="images/HG_circle.png" alt="Health Generation" class="hero-circle-img">
-        <span class="hero-pill hero-pill--hg">Strategy</span>
       </a>
 
       <a href="#nursegen" class="hero-circle hero-circle--ng" aria-label="NurseGen — People">
         <img src="images/NG_circle.png" alt="NurseGen" class="hero-circle-img">
-        <span class="hero-pill hero-pill--ng">People</span>
       </a>
 
       <a href="#caregen" class="hero-circle hero-circle--cg" aria-label="CareGen — Intelligence">
         <img src="images/CG_circle.png" alt="CareGen" class="hero-circle-img">
-        <span class="hero-pill hero-pill--cg">Intelligence</span>
       </a>
 
     </div>
