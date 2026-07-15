@@ -33,6 +33,26 @@
      CTAs, links, highlights, icons — used sparingly for emphasis. */
   --color-accent: #FF616B;
 
+  /* The Ecosystem — Color System
+     Pulled from the "Our Ecosystem" hero: an off-white/neutral base with a soft
+     blurred blend of the 3 brands' colors (HealthGen navy, NurseGen teal,
+     CareGen coral/violet). Not a flat 60/30/10 split — this is a gradient mesh. */
+
+  /* Base — dominant off-white, most of the canvas. */
+  --color-base: #F4F4F6;
+
+  /* Blur blend — deep navy/blue, the largest colored mass in the mesh (right-edge bloom). */
+  --color-blur-blue: #3546BC;
+
+  /* Blur blend — coral/red, from the hero's left-edge bloom. */
+  --color-blur-coral: #EF6A73;
+
+  /* Pastel mesh tones — soft tints of each brand, used for the blurred blob. */
+  --color-mesh-blue: #C4CAF2;   /* HealthGen tint */
+  --color-mesh-teal: #B8E2E0;   /* NurseGen tint */
+  --color-mesh-violet: #D9CFF0; /* CareGen tint */
+  --color-mesh-amber: #FCE9B2;  /* warm highlight tint */
+
   --page-bg-base: #f4f4f6;
 
   /* Navy scale */
@@ -198,6 +218,22 @@ ul { list-style: none; }
 }
 .sg-role-desc { font-size: 12.5px; line-height: 1.6; color: var(--lt-text-3); }
 @media (max-width: 720px) { .sg-roles { grid-template-columns: 1fr; } }
+
+/* ecosystem gradient-mesh demo tile */
+.sg-mesh-demo {
+  height: 180px;
+  border-radius: 14px;
+  border: 1px solid rgba(19, 23, 52, 0.08);
+  margin-bottom: 14px;
+  background:
+    radial-gradient(ellipse at 6% 30%, rgba(239, 106, 115, 0.42) 0%, transparent 55%),
+    radial-gradient(ellipse at 96% 28%, rgba(53, 70, 188, 0.36) 0%, transparent 55%),
+    radial-gradient(circle at 32% 78%, rgba(196, 202, 242, 0.85) 0%, transparent 50%),
+    radial-gradient(circle at 52% 40%, rgba(184, 226, 224, 0.80) 0%, transparent 45%),
+    radial-gradient(circle at 70% 75%, rgba(217, 207, 240, 0.85) 0%, transparent 50%),
+    radial-gradient(circle at 86% 62%, rgba(252, 233, 178, 0.75) 0%, transparent 45%),
+    var(--color-base);
+}
 
 .sg-swatches {
   display: grid;
@@ -639,6 +675,19 @@ ul { list-style: none; }
         <p class="sg-role-desc">10% of visual weight. CTAs, links, highlights, icons &mdash; used sparingly for emphasis.</p>
       </div>
     </div>
+
+    <p class="sg-sub-label">The Ecosystem &mdash; gradient mesh</p>
+    <div class="sg-mesh-demo" aria-hidden="true"></div>
+    <div class="sg-swatches">
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#F4F4F6"></div><div class="sg-swatch-name">Base</div><span class="sg-swatch-hex">#F4F4F6 &middot; --color-base</span></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#3546BC"></div><div class="sg-swatch-name">Blur Blue</div><span class="sg-swatch-hex">#3546BC &middot; --color-blur-blue</span></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#EF6A73"></div><div class="sg-swatch-name">Blur Coral</div><span class="sg-swatch-hex">#EF6A73 &middot; --color-blur-coral</span></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#C4CAF2"></div><div class="sg-swatch-name">Mesh Blue &mdash; HealthGen tint</div><span class="sg-swatch-hex">#C4CAF2 &middot; --color-mesh-blue</span></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#B8E2E0"></div><div class="sg-swatch-name">Mesh Teal &mdash; NurseGen tint</div><span class="sg-swatch-hex">#B8E2E0 &middot; --color-mesh-teal</span></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#D9CFF0"></div><div class="sg-swatch-name">Mesh Violet &mdash; CareGen tint</div><span class="sg-swatch-hex">#D9CFF0 &middot; --color-mesh-violet</span></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#FCE9B2"></div><div class="sg-swatch-name">Mesh Amber &mdash; warm highlight</div><span class="sg-swatch-hex">#FCE9B2 &middot; --color-mesh-amber</span></div>
+    </div>
+    <p class="sg-caption">The hero canvas is mostly the off-white base; the coloured mass is a soft blurred mesh &mdash; not flat fills. Use the blur colours at low opacity with heavy blur, and the pastel tints for the blob itself.</p>
 
     <p class="sg-sub-label">Core / Health Generation</p>
     <div class="sg-swatches">
