@@ -1,0 +1,20 @@
+/* ═══════════════════════════════════════════════════════════════
+   HG Ecosystem — colour token entry point
+
+   Loads all four brand token files. Every token is namespaced
+   (--hg-*, --ng-*, --cg-*, --eco-*) so the files never collide.
+
+   Usage:
+     <link rel="stylesheet" href="tokens/tokens.css">      all brands
+     <link rel="stylesheet" href="tokens/nursegen.css">    one brand only
+
+   Then either use the namespaced tokens directly:
+     background: var(--hg-dominant);
+   or scope a region to a brand and use the generic role tokens:
+     <section data-brand="caregen">  →  color: var(--color-accent);
+   ═══════════════════════════════════════════════════════════════ */
+
+@import url("healthgen.css");
+@import url("nursegen.css");
+@import url("caregen.css");
+@import url("ecosystem.css");

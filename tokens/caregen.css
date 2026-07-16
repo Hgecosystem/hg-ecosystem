@@ -1,0 +1,27 @@
+/* ═══════════════════════════════════════════════════════════════
+   CareGen — colour tokens
+   60% Dominant | 30% Secondary | 10% Accent
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Dominant — 60% of visual weight.
+     Backgrounds, large surfaces, nav bars, hero sections. */
+  --cg-dominant: #612CAD;
+
+  /* Secondary — 30% of visual weight.
+     Cards, panels, secondary buttons, section dividers. */
+  --cg-secondary: #050025;
+
+  /* Accent — 10% of visual weight.
+     CTAs, links, highlights, icons — used sparingly for emphasis. */
+  --cg-accent: #F5B533;
+}
+
+/* Role aliases — scope a page or component to this brand with
+   <body data-brand="caregen"> (or any wrapper element), then
+   style components against the generic --color-* tokens. */
+[data-brand="caregen"] {
+  --color-dominant:  var(--cg-dominant);
+  --color-secondary: var(--cg-secondary);
+  --color-accent:    var(--cg-accent);
+}

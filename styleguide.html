@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Style Guide — Health Generation</title>
+<link rel="stylesheet" href="tokens/tokens.css">
 <style>
 @font-face {
   font-family: 'Manrope';
@@ -81,7 +82,6 @@
   --brand-btn-blue:  #424D95;
   --brand-accent:    #435DA9;
   --brand-lightblue: #B3CEF7;
-  --hg-coral:        #FF6341;
   --ng-teal:         #59B0AB;
   --ng-teal-light:   #A6D8D5;
   --cg-dark:         #050025;
@@ -101,6 +101,18 @@
 
   --radius-card: 25px;
   --font: 'Manrope', system-ui, sans-serif;
+
+  /* Guide chrome — matches the published artifact style guide cover:
+     ecosystem bloom background, glass panels, indigo pill chips.
+     Applies to the guide's own chrome only; the HG component demos
+     keep the site's exact styles. */
+  --sg-chip-ink:     #424D95;
+  --sg-chip-bg:      rgba(53, 70, 188, 0.08);
+  --sg-chip-border:  rgba(53, 70, 188, 0.18);
+  --sg-panel:        rgba(255, 255, 255, 0.52);
+  --sg-panel-border: rgba(255, 255, 255, 0.78);
+  --sg-tile:         rgba(255, 255, 255, 0.62);
+  --sg-tile-border:  rgba(19, 23, 52, 0.08);
 }
 
 /* ─── Base ─────────────────────────────────────────────────────── */
@@ -113,56 +125,176 @@ body {
   font-size: 16px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
 }
+
+/* fixed edge blooms + film grain, as on the cover */
+.sg-page-bg { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+.sg-bloom {
+  position: absolute; width: 74vw; height: 130vh; top: -15vh;
+  border-radius: 50%; filter: blur(130px);
+}
+.sg-bloom--left {
+  left: -28vw; opacity: 0.42;
+  background: radial-gradient(ellipse at 35% 35%, #EF6A73 0%, transparent 68%);
+}
+.sg-bloom--right {
+  right: -28vw; opacity: 0.36;
+  background: radial-gradient(ellipse at 65% 35%, #3546BC 0%, transparent 68%);
+}
+.sg-grain {
+  position: fixed; inset: 0; pointer-events: none; z-index: 9999;
+  opacity: 0.09; mix-blend-mode: overlay;
+}
+.sg-grain svg { width: 100%; height: 100%; display: block; }
 
 a { text-decoration: none; color: inherit; }
 ul { list-style: none; }
 
-/* ─── Style guide chrome ───────────────────────────────────────── */
-.sg-page { max-width: 1160px; margin: 0 auto; padding: 64px 24px 80px; }
+/* ─── Style guide chrome — artifact cover treatment ────────────── */
+.sg-page { position: relative; z-index: 1; max-width: 1160px; margin: 0 auto; padding: 0 24px 64px; }
 
-.sg-header { text-align: center; margin-bottom: 56px; }
-.sg-header .sg-logo { height: 56px; width: auto; margin-bottom: 28px; }
+/* Cover: open hero over the blooms, like the artifact */
+.sg-header {
+  text-align: center;
+  padding: 96px 0 48px;
+  margin-bottom: 16px;
+}
+.sg-header .sg-logo { height: 56px; width: auto; margin-bottom: 36px; }
+.sg-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sg-chip-ink);
+  background: var(--sg-chip-bg);
+  border: 1px solid var(--sg-chip-border);
+  border-radius: 100px;
+  padding: 6px 16px;
+  margin-bottom: 24px;
+}
+.sg-badge::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
 .sg-title {
-  font-size: clamp(32px, 4vw, 48px);
   font-weight: 700;
   letter-spacing: -0.03em;
-  line-height: 1.08;
+  line-height: 1.05;
+  margin-bottom: 18px;
+}
+.sg-title-1 {
+  display: block;
+  font-size: clamp(28px, 3.6vw, 46px);
+  color: var(--lt-text-1);
+}
+.sg-title-2 {
+  display: block;
+  font-size: clamp(38px, 5.2vw, 66px);
+  color: #435DA9;
+}
+.sg-intro {
+  font-size: clamp(15px, 1.4vw, 17px);
+  line-height: 1.65;
+  color: var(--lt-text-3);
+  max-width: 560px;
+  margin: 0 auto 32px;
+  text-wrap: pretty;
+}
+.sg-brand-dots { display: flex; gap: 14px; align-items: center; justify-content: center; }
+.sg-dot-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--lt-text-2);
+  background: var(--sg-tile);
+  border: 1px solid var(--sg-tile-border);
+  border-radius: 100px;
+  padding: 7px 16px 7px 10px;
+}
+.sg-dot-pill i { width: 14px; height: 14px; border-radius: 50%; display: block; }
+
+/* sections are frosted glass panels over the blooms */
+.sg-section {
+  background: var(--sg-panel);
+  border: 1px solid var(--sg-panel-border);
+  border-radius: var(--radius-card);
+  padding: 56px clamp(24px, 5vw, 64px) 60px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 2px 20px rgba(53, 70, 188, 0.05);
+  margin-bottom: 28px;
+}
+.sg-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sg-chip-ink);
+  background: var(--sg-chip-bg);
+  border: 1px solid var(--sg-chip-border);
+  border-radius: 100px;
+  padding: 5px 14px;
+  margin-bottom: 20px;
+}
+.sg-eyebrow::before {
+  content: '';
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.sg-section-heading {
+  font-size: clamp(26px, 3vw, 38px);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.12;
   color: var(--lt-text-1);
   margin-bottom: 12px;
+  text-wrap: balance;
 }
-.sg-intro { font-size: 15px; color: var(--lt-text-3); max-width: 560px; margin: 0 auto; }
-
-.sg-section { margin-bottom: 64px; }
-.sg-section-heading {
-  font-size: clamp(22px, 2.4vw, 30px);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--lt-text-1);
-  padding-bottom: 12px;
+.sg-section-note {
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--lt-text-3);
   margin-bottom: 8px;
-  border-bottom: 1px solid rgba(19, 23, 52, 0.10);
+  max-width: 640px;
+  text-wrap: pretty;
 }
-.sg-section-note { font-size: 13.5px; color: var(--lt-text-3); margin-bottom: 28px; max-width: 640px; }
 .sg-sub-label {
-  font-size: 10.5px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
-  color: var(--lt-text-4); margin: 28px 0 14px;
+  display: block;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--lt-text-4);
+  margin: 44px 0 16px;
 }
 
-/* white demo surface so components sit on a clean neutral ground */
+/* demo tiles inside the glass panels */
 .sg-demo {
-  background: #ffffff;
-  border: 1px solid rgba(19, 23, 52, 0.08);
-  border-radius: 16px;
+  background: var(--sg-tile);
+  border: 1px solid var(--sg-tile-border);
+  border-radius: 18px;
   padding: 32px;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 18px;
 }
-.sg-demo--dark { background: var(--brand-navy); }
+.sg-demo--dark { background: var(--brand-navy); border-color: var(--brand-navy); }
 .sg-demo--column { flex-direction: column; align-items: stretch; gap: 0; }
-.sg-caption { font-size: 12px; color: var(--lt-text-4); margin-top: 10px; }
+.sg-caption { font-size: 12.5px; color: var(--lt-text-4); margin-top: 12px; }
 
 /* ─── 1. Colors ────────────────────────────────────────────────── */
 
@@ -172,7 +304,7 @@ ul { list-style: none; }
   height: 56px;
   border-radius: 12px;
   overflow: hidden;
-  border: 1px solid rgba(19, 23, 52, 0.08);
+  border: 1px solid var(--sg-tile-border);
   margin-bottom: 14px;
 }
 .sg-ratio-bar span {
@@ -190,14 +322,15 @@ ul { list-style: none; }
 
 .sg-roles {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 14px;
+  margin-bottom: 28px;
 }
 .sg-role {
-  background: #ffffff;
-  border: 1px solid rgba(19, 23, 52, 0.08);
-  border-radius: 14px;
-  padding: 18px 20px;
+  background: var(--sg-tile);
+  border: 1px solid var(--sg-tile-border);
+  border-radius: 16px;
+  padding: 20px 22px;
 }
 .sg-role-chip {
   display: inline-flex;
@@ -222,8 +355,8 @@ ul { list-style: none; }
 /* ecosystem gradient-mesh demo tile */
 .sg-mesh-demo {
   height: 180px;
-  border-radius: 14px;
-  border: 1px solid rgba(19, 23, 52, 0.08);
+  border-radius: 16px;
+  border: 1px solid var(--sg-tile-border);
   margin-bottom: 14px;
   background:
     radial-gradient(ellipse at 6% 30%, rgba(239, 106, 115, 0.42) 0%, transparent 55%),
@@ -241,14 +374,14 @@ ul { list-style: none; }
   gap: 14px;
 }
 .sg-swatch {
-  background: #ffffff;
-  border: 1px solid rgba(19, 23, 52, 0.08);
-  border-radius: 14px;
+  background: var(--sg-tile);
+  border: 1px solid var(--sg-tile-border);
+  border-radius: 16px;
   padding: 8px;
 }
 .sg-swatch-color {
   height: 72px;
-  border-radius: 9px;
+  border-radius: 10px;
   border: 1px solid rgba(19, 23, 52, 0.06);
   margin-bottom: 8px;
 }
@@ -265,7 +398,7 @@ ul { list-style: none; }
   gap: 24px;
   align-items: baseline;
   padding: 22px 0;
-  border-bottom: 1px solid rgba(19, 23, 52, 0.07);
+  border-bottom: 1px solid var(--sg-tile-border);
 }
 .sg-type-row:last-child { border-bottom: 0; }
 .sg-type-spec { font-size: 12px; line-height: 1.7; color: var(--lt-text-3); }
@@ -393,7 +526,7 @@ ul { list-style: none; }
   padding: 8px 18px 8px 12px;
 }
 .brand-pill i { width: 12px; height: 12px; border-radius: 50%; display: block; }
-.brand-pill--hg i { background: var(--hg-coral); }
+.brand-pill--hg i { background: var(--hg-accent); }
 .brand-pill--ng i { background: var(--ng-teal); }
 .brand-pill--cg i { background: var(--cg-purple); }
 
@@ -466,7 +599,7 @@ ul { list-style: none; }
   flex-shrink: 0;
 }
 .biz-icon img { width: 32px; height: 32px; object-fit: contain; }
-.biz-card--hg .biz-icon { background: var(--hg-coral); }
+.biz-card--hg .biz-icon { background: var(--hg-accent); }
 .biz-card--ng .biz-icon { background: rgba(255, 255, 255, 0.20); }
 .biz-card--cg .biz-icon { background: rgba(255, 255, 255, 0.15); }
 .biz-eyebrow {
@@ -638,84 +771,152 @@ ul { list-style: none; }
 </head>
 <body>
 
+<!-- fixed background: edge blooms + film grain (cover atmosphere) -->
+<div class="sg-page-bg" aria-hidden="true">
+  <div class="sg-bloom sg-bloom--left"></div>
+  <div class="sg-bloom sg-bloom--right"></div>
+</div>
+<div class="sg-grain" aria-hidden="true">
+  <svg xmlns="http://www.w3.org/2000/svg">
+    <filter id="sg-grain-f">
+      <feTurbulence type="fractalNoise" baseFrequency="0.80" numOctaves="4" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+    </filter>
+    <rect width="100%" height="100%" filter="url(#sg-grain-f)"/>
+  </svg>
+</div>
+
 <div class="sg-page">
 
   <!-- ═══ Header ═══════════════════════════════════════════════ -->
   <header class="sg-header">
     <img class="sg-logo" src="images/HG_Logo.svg" alt="Health Generation">
-    <h1 class="sg-title">HG Ecosystem Style Guide</h1>
+    <span class="sg-badge">Brand &amp; Design System</span>
+    <h1 class="sg-title">
+      <span class="sg-title-1">HG Ecosystem</span>
+      <span class="sg-title-2">Style Guide</span>
+    </h1>
     <p class="sg-intro">Every color, type style and component used across the Health Generation ecosystem site, rendered with the same fonts, variables and CSS as the live pages.</p>
+    <div class="sg-brand-dots">
+      <span class="sg-dot-pill"><i style="background:var(--hg-dominant)"></i>HealthGen</span>
+      <span class="sg-dot-pill"><i style="background:var(--ng-dominant)"></i>NurseGen</span>
+      <span class="sg-dot-pill"><i style="background:var(--cg-dominant)"></i>CareGen</span>
+    </div>
   </header>
 
   <!-- ═══ 1. Colors ════════════════════════════════════════════ -->
   <section class="sg-section" id="colors">
-    <h2 class="sg-section-heading">1. Colors</h2>
-    <p class="sg-section-note">Brand palette for the ecosystem and each business. Navy grounds the system; each brand owns its own accent family.</p>
+    <span class="sg-eyebrow">Section 1</span>
+    <h2 class="sg-section-heading">Colors</h2>
+    <p class="sg-section-note">Colour tokens for the four brands, loaded live from the <code>tokens/</code> directory (one CSS file per brand). Each sub-brand follows the 60/30/10 rule &mdash; dominant on backgrounds and large surfaces, secondary on cards and panels, accent used sparingly on CTAs and highlights. The parent Ecosystem brand is a blurred gradient mesh instead.</p>
 
-    <p class="sg-sub-label">Colour system &mdash; 60/30/10 rule</p>
+    <p class="sg-sub-label">The Ecosystem &mdash; parent brand &middot; gradient mesh</p>
+    <div class="sg-mesh-demo" aria-hidden="true"></div>
+    <div class="sg-swatches">
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:var(--eco-base)"></div><div class="sg-swatch-name">Base</div><span class="sg-swatch-hex">#F4F4F6 &middot; --eco-base</span></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:var(--eco-blur-blue)"></div><div class="sg-swatch-name">Blur Blue</div><span class="sg-swatch-hex">#3546BC &middot; --eco-blur-blue</span></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:var(--eco-blur-coral)"></div><div class="sg-swatch-name">Blur Coral</div><span class="sg-swatch-hex">#EF6A73 &middot; --eco-blur-coral</span></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:var(--eco-mesh-healthgen)"></div><div class="sg-swatch-name">Mesh &mdash; HealthGen tint</div><span class="sg-swatch-hex">#C4CAF2 &middot; --eco-mesh-healthgen</span></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:var(--eco-mesh-nursegen)"></div><div class="sg-swatch-name">Mesh &mdash; NurseGen tint</div><span class="sg-swatch-hex">#B8E2E0 &middot; --eco-mesh-nursegen</span></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:var(--eco-mesh-caregen)"></div><div class="sg-swatch-name">Mesh &mdash; CareGen tint</div><span class="sg-swatch-hex">#D9CFF0 &middot; --eco-mesh-caregen</span></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:var(--eco-mesh-warm)"></div><div class="sg-swatch-name">Mesh &mdash; warm highlight</div><span class="sg-swatch-hex">#FCE9B2 &middot; --eco-mesh-warm</span></div>
+    </div>
+    <p class="sg-caption">The canvas is mostly the off-white base; the coloured mass is a soft blurred mesh blending all three sub-brands &mdash; never flat fills.</p>
+
+    <p class="sg-sub-label">Health Generation &mdash; 60/30/10</p>
     <div class="sg-ratio-bar" aria-hidden="true">
-      <span class="r60">60%</span>
-      <span class="r30">30%</span>
-      <span class="r10">10%</span>
+      <span class="r60" style="background:var(--hg-dominant)">60%</span>
+      <span class="r30" style="background:var(--hg-secondary)">30%</span>
+      <span class="r10" style="background:var(--hg-accent)">10%</span>
     </div>
     <div class="sg-roles">
       <div class="sg-role">
-        <span class="sg-role-chip"><i style="background:var(--color-dominant)"></i>Dominant</span>
-        <span class="sg-role-hex">#131734 &middot; --color-dominant</span>
+        <span class="sg-role-chip"><i style="background:var(--hg-dominant)"></i>Dominant</span>
+        <span class="sg-role-hex">#131734 &middot; --hg-dominant</span>
         <p class="sg-role-desc">60% of visual weight. Backgrounds, large surfaces, nav bars, hero sections.</p>
       </div>
       <div class="sg-role">
-        <span class="sg-role-chip"><i style="background:var(--color-secondary)"></i>Secondary</span>
-        <span class="sg-role-hex">#252D64 &middot; --color-secondary</span>
+        <span class="sg-role-chip"><i style="background:var(--hg-secondary)"></i>Secondary</span>
+        <span class="sg-role-hex">#252D64 &middot; --hg-secondary</span>
         <p class="sg-role-desc">30% of visual weight. Cards, panels, secondary buttons, section dividers.</p>
       </div>
       <div class="sg-role">
-        <span class="sg-role-chip"><i style="background:var(--color-accent)"></i>Accent</span>
-        <span class="sg-role-hex">#FF616B &middot; --color-accent</span>
+        <span class="sg-role-chip"><i style="background:var(--hg-accent)"></i>Accent</span>
+        <span class="sg-role-hex">#FF616B &middot; --hg-accent</span>
         <p class="sg-role-desc">10% of visual weight. CTAs, links, highlights, icons &mdash; used sparingly for emphasis.</p>
       </div>
     </div>
 
-    <p class="sg-sub-label">The Ecosystem &mdash; gradient mesh</p>
-    <div class="sg-mesh-demo" aria-hidden="true"></div>
-    <div class="sg-swatches">
-      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#F4F4F6"></div><div class="sg-swatch-name">Base</div><span class="sg-swatch-hex">#F4F4F6 &middot; --color-base</span></div>
-      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#3546BC"></div><div class="sg-swatch-name">Blur Blue</div><span class="sg-swatch-hex">#3546BC &middot; --color-blur-blue</span></div>
-      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#EF6A73"></div><div class="sg-swatch-name">Blur Coral</div><span class="sg-swatch-hex">#EF6A73 &middot; --color-blur-coral</span></div>
-      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#C4CAF2"></div><div class="sg-swatch-name">Mesh Blue &mdash; HealthGen tint</div><span class="sg-swatch-hex">#C4CAF2 &middot; --color-mesh-blue</span></div>
-      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#B8E2E0"></div><div class="sg-swatch-name">Mesh Teal &mdash; NurseGen tint</div><span class="sg-swatch-hex">#B8E2E0 &middot; --color-mesh-teal</span></div>
-      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#D9CFF0"></div><div class="sg-swatch-name">Mesh Violet &mdash; CareGen tint</div><span class="sg-swatch-hex">#D9CFF0 &middot; --color-mesh-violet</span></div>
-      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#FCE9B2"></div><div class="sg-swatch-name">Mesh Amber &mdash; warm highlight</div><span class="sg-swatch-hex">#FCE9B2 &middot; --color-mesh-amber</span></div>
+    <p class="sg-sub-label">Nurse Generation &mdash; 60/30/10</p>
+    <div class="sg-ratio-bar" aria-hidden="true">
+      <span class="r60" style="background:var(--ng-dominant)">60%</span>
+      <span class="r30" style="background:var(--ng-secondary)">30%</span>
+      <span class="r10" style="background:var(--ng-accent)">10%</span>
     </div>
-    <p class="sg-caption">The hero canvas is mostly the off-white base; the coloured mass is a soft blurred mesh &mdash; not flat fills. Use the blur colours at low opacity with heavy blur, and the pastel tints for the blob itself.</p>
+    <div class="sg-roles">
+      <div class="sg-role">
+        <span class="sg-role-chip"><i style="background:var(--ng-dominant)"></i>Dominant</span>
+        <span class="sg-role-hex">#57B6B2 &middot; --ng-dominant</span>
+        <p class="sg-role-desc">60% of visual weight. Backgrounds, large surfaces, nav bars, hero sections.</p>
+      </div>
+      <div class="sg-role">
+        <span class="sg-role-chip"><i style="background:var(--ng-secondary)"></i>Secondary</span>
+        <span class="sg-role-hex">#575195 &middot; --ng-secondary</span>
+        <p class="sg-role-desc">30% of visual weight. Cards, panels, secondary buttons, section dividers.</p>
+      </div>
+      <div class="sg-role">
+        <span class="sg-role-chip"><i style="background:var(--ng-accent)"></i>Accent</span>
+        <span class="sg-role-hex">#928CCF &middot; --ng-accent</span>
+        <p class="sg-role-desc">10% of visual weight. CTAs, links, highlights, icons &mdash; used sparingly for emphasis.</p>
+      </div>
+      <div class="sg-role">
+        <span class="sg-role-chip"><i style="background:var(--ng-accent-2)"></i>Accent 2</span>
+        <span class="sg-role-hex">#93DACF &middot; --ng-accent-2</span>
+        <p class="sg-role-desc">Secondary accent. Supporting highlights where the primary accent is already in use.</p>
+      </div>
+    </div>
 
-    <p class="sg-sub-label">Core / Health Generation</p>
+    <p class="sg-sub-label">CareGen &mdash; 60/30/10</p>
+    <div class="sg-ratio-bar" aria-hidden="true">
+      <span class="r60" style="background:var(--cg-dominant)">60%</span>
+      <span class="r30" style="background:var(--cg-secondary)">30%</span>
+      <span class="r10" style="background:var(--cg-accent); color:rgba(19,23,52,0.75)">10%</span>
+    </div>
+    <div class="sg-roles">
+      <div class="sg-role">
+        <span class="sg-role-chip"><i style="background:var(--cg-dominant)"></i>Dominant</span>
+        <span class="sg-role-hex">#612CAD &middot; --cg-dominant</span>
+        <p class="sg-role-desc">60% of visual weight. Backgrounds, large surfaces, nav bars, hero sections.</p>
+      </div>
+      <div class="sg-role">
+        <span class="sg-role-chip"><i style="background:var(--cg-secondary)"></i>Secondary</span>
+        <span class="sg-role-hex">#050025 &middot; --cg-secondary</span>
+        <p class="sg-role-desc">30% of visual weight. Cards, panels, secondary buttons, section dividers.</p>
+      </div>
+      <div class="sg-role">
+        <span class="sg-role-chip"><i style="background:var(--cg-accent)"></i>Accent</span>
+        <span class="sg-role-hex">#F5B533 &middot; --cg-accent</span>
+        <p class="sg-role-desc">10% of visual weight. CTAs, links, highlights, icons &mdash; used sparingly for emphasis.</p>
+      </div>
+    </div>
+
+    <p class="sg-sub-label">Legacy &mdash; current site values (not yet migrated to tokens)</p>
     <div class="sg-swatches">
       <div class="sg-swatch"><div class="sg-swatch-color" style="background:#252D64"></div><div class="sg-swatch-name">Navy</div><span class="sg-swatch-hex">#252D64</span></div>
       <div class="sg-swatch"><div class="sg-swatch-color" style="background:#3546BC"></div><div class="sg-swatch-name">Blue</div><span class="sg-swatch-hex">#3546BC</span></div>
       <div class="sg-swatch"><div class="sg-swatch-color" style="background:#424D95"></div><div class="sg-swatch-name">Button Blue</div><span class="sg-swatch-hex">#424D95</span></div>
       <div class="sg-swatch"><div class="sg-swatch-color" style="background:#435DA9"></div><div class="sg-swatch-name">Accent</div><span class="sg-swatch-hex">#435DA9</span></div>
       <div class="sg-swatch"><div class="sg-swatch-color" style="background:#B3CEF7"></div><div class="sg-swatch-name">Light Blue</div><span class="sg-swatch-hex">#B3CEF7</span></div>
-    </div>
-
-    <p class="sg-sub-label">HealthGen &amp; NurseGen</p>
-    <div class="sg-swatches">
-      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#FF6341"></div><div class="sg-swatch-name">HealthGen</div><span class="sg-swatch-hex">#FF6341</span></div>
-      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#59B0AB"></div><div class="sg-swatch-name">NurseGen</div><span class="sg-swatch-hex">#59B0AB</span></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#59B0AB"></div><div class="sg-swatch-name">NurseGen teal</div><span class="sg-swatch-hex">#59B0AB</span></div>
       <div class="sg-swatch"><div class="sg-swatch-color" style="background:#A6D8D5"></div><div class="sg-swatch-name">NurseGen Light</div><span class="sg-swatch-hex">#A6D8D5</span></div>
     </div>
-
-    <p class="sg-sub-label">CareGen</p>
-    <div class="sg-swatches">
-      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#050025"></div><div class="sg-swatch-name">CareGen Dark</div><span class="sg-swatch-hex">#050025</span></div>
-      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#612CAD"></div><div class="sg-swatch-name">CareGen Purple</div><span class="sg-swatch-hex">#612CAD</span></div>
-      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#F5B533"></div><div class="sg-swatch-name">CareGen Amber</div><span class="sg-swatch-hex">#F5B533</span></div>
-    </div>
+    <p class="sg-caption">Values still used by index.html and older sections of this guide.</p>
   </section>
 
   <!-- ═══ 2. Typography ════════════════════════════════════════ -->
   <section class="sg-section" id="typography">
-    <h2 class="sg-section-heading">2. Typography</h2>
+    <span class="sg-eyebrow">Section 2</span>
+    <h2 class="sg-section-heading">Typography</h2>
     <p class="sg-section-note">Manrope (variable, weights 400&ndash;700) is the only typeface. Hierarchy comes from size, weight and letter-spacing.</p>
 
     <div class="sg-demo sg-demo--column">
@@ -752,7 +953,8 @@ ul { list-style: none; }
 
   <!-- ═══ 3. Buttons ═══════════════════════════════════════════ -->
   <section class="sg-section" id="buttons">
-    <h2 class="sg-section-heading">3. Buttons</h2>
+    <span class="sg-eyebrow">Section 3</span>
+    <h2 class="sg-section-heading">Buttons</h2>
     <p class="sg-section-note">All controls are full-radius pills. Primary carries the indigo action color; outline and card CTA sit on dark or brand surfaces.</p>
 
     <p class="sg-sub-label">Primary &mdash; on light</p>
@@ -776,7 +978,8 @@ ul { list-style: none; }
 
   <!-- ═══ 4. Badges / Pills ════════════════════════════════════ -->
   <section class="sg-section" id="badges">
-    <h2 class="sg-section-heading">4. Badges &amp; Pills</h2>
+    <span class="sg-eyebrow">Section 4</span>
+    <h2 class="sg-section-heading">Badges &amp; Pills</h2>
     <p class="sg-section-note">The eyebrow pill opens hero and section headers; brand pills tag the three engines with their color dots.</p>
 
     <div class="sg-demo">
@@ -789,7 +992,8 @@ ul { list-style: none; }
 
   <!-- ═══ 5. Cards ═════════════════════════════════════════════ -->
   <section class="sg-section" id="cards">
-    <h2 class="sg-section-heading">5. Cards</h2>
+    <span class="sg-eyebrow">Section 5</span>
+    <h2 class="sg-section-heading">Cards</h2>
     <p class="sg-section-note">One light capability card plus the three brand business cards. Corners are always 25px; brand cards carry a 1px white inner top edge.</p>
 
     <div class="sg-card-grid">
@@ -855,7 +1059,8 @@ ul { list-style: none; }
 
   <!-- ═══ 6. Icons ═════════════════════════════════════════════ -->
   <section class="sg-section" id="icons">
-    <h2 class="sg-section-heading">6. Icons</h2>
+    <span class="sg-eyebrow">Section 6</span>
+    <h2 class="sg-section-heading">Icons</h2>
     <p class="sg-section-note">The 52px icon wrapper square (13px radius) in each brand color variant, with a white 1.7px stroke glyph.</p>
 
     <div class="sg-demo">
@@ -890,7 +1095,8 @@ ul { list-style: none; }
 
   <!-- ═══ 7. Navigation ════════════════════════════════════════ -->
   <section class="sg-section" id="navigation">
-    <h2 class="sg-section-heading">7. Navigation</h2>
+    <span class="sg-eyebrow">Section 7</span>
+    <h2 class="sg-section-heading">Navigation</h2>
     <p class="sg-section-note">The frosted glass navbar: logo outside the pill, links inside a blurred white capsule with an indigo CTA. On the live site it is fixed to the top of the viewport.</p>
 
     <div class="sg-navdemo">
@@ -911,7 +1117,8 @@ ul { list-style: none; }
 
   <!-- ═══ 8. Footer ════════════════════════════════════════════ -->
   <section class="sg-section" id="footer">
-    <h2 class="sg-section-heading">8. Footer</h2>
+    <span class="sg-eyebrow">Section 8</span>
+    <h2 class="sg-section-heading">Footer</h2>
     <p class="sg-section-note">Glass footer card with logo, social icons, link row and copyright line.</p>
 
     <footer class="site-footer" aria-label="Demo footer">

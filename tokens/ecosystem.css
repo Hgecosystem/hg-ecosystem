@@ -1,0 +1,36 @@
+/* ═══════════════════════════════════════════════════════════════
+   The Ecosystem — colour tokens (parent brand)
+
+   Not a strict 60/30/10: the ecosystem look is a blurred gradient
+   mesh blending all 3 sub-brands over an off-white base — soft
+   radial washes and pastel tints, never flat fills.
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Base — off-white, dominant. Most of the canvas. */
+  --eco-base: #F4F4F6;
+
+  /* Blur blends — the large coloured masses in the mesh,
+     used at low opacity with heavy blur (site: right/left edge blooms). */
+  --eco-blur-blue:  #3546BC;
+  --eco-blur-coral: #EF6A73;
+
+  /* Pastel mesh tints — soft tints of each brand for the blurred blob. */
+  --eco-mesh-healthgen: #C4CAF2;
+  --eco-mesh-nursegen:  #B8E2E0;
+  --eco-mesh-caregen:   #D9CFF0;
+  --eco-mesh-warm:      #FCE9B2; /* warm highlight tint */
+}
+
+/* Role aliases — scope a page or component to the parent brand with
+   <body data-brand="ecosystem"> (or any wrapper element). The base
+   maps to the dominant role; the mesh has no flat secondary/accent. */
+[data-brand="ecosystem"] {
+  --color-base:        var(--eco-base);
+  --color-blur-blue:   var(--eco-blur-blue);
+  --color-blur-coral:  var(--eco-blur-coral);
+  --color-mesh-blue:   var(--eco-mesh-healthgen);
+  --color-mesh-teal:   var(--eco-mesh-nursegen);
+  --color-mesh-violet: var(--eco-mesh-caregen);
+  --color-mesh-amber:  var(--eco-mesh-warm);
+}

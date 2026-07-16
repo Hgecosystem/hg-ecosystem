@@ -1,0 +1,27 @@
+/* ═══════════════════════════════════════════════════════════════
+   Health Generation — colour tokens
+   60% Dominant | 30% Secondary | 10% Accent
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Dominant — 60% of visual weight.
+     Backgrounds, large surfaces, nav bars, hero sections. */
+  --hg-dominant: #131734;
+
+  /* Secondary — 30% of visual weight.
+     Cards, panels, secondary buttons, section dividers. */
+  --hg-secondary: #252D64;
+
+  /* Accent — 10% of visual weight.
+     CTAs, links, highlights, icons — used sparingly for emphasis. */
+  --hg-accent: #FF616B;
+}
+
+/* Role aliases — scope a page or component to this brand with
+   <body data-brand="healthgen"> (or any wrapper element), then
+   style components against the generic --color-* tokens. */
+[data-brand="healthgen"] {
+  --color-dominant:  var(--hg-dominant);
+  --color-secondary: var(--hg-secondary);
+  --color-accent:    var(--hg-accent);
+}

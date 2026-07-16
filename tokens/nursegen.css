@@ -1,0 +1,32 @@
+/* ═══════════════════════════════════════════════════════════════
+   Nurse Generation — colour tokens
+   60% Dominant | 30% Secondary | 10% Accent (+ secondary accent)
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Dominant — 60% of visual weight.
+     Backgrounds, large surfaces, nav bars, hero sections. */
+  --ng-dominant: #57B6B2;
+
+  /* Secondary — 30% of visual weight.
+     Cards, panels, secondary buttons, section dividers. */
+  --ng-secondary: #575195;
+
+  /* Accent — 10% of visual weight.
+     CTAs, links, highlights, icons — used sparingly for emphasis. */
+  --ng-accent: #928CCF;
+
+  /* Accent 2 — secondary accent.
+     Supporting highlights where the primary accent is already in use. */
+  --ng-accent-2: #93DACF;
+}
+
+/* Role aliases — scope a page or component to this brand with
+   <body data-brand="nursegen"> (or any wrapper element), then
+   style components against the generic --color-* tokens. */
+[data-brand="nursegen"] {
+  --color-dominant:  var(--ng-dominant);
+  --color-secondary: var(--ng-secondary);
+  --color-accent:    var(--ng-accent);
+  --color-accent-2:  var(--ng-accent-2);
+}
