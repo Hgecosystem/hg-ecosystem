@@ -330,30 +330,50 @@ main {
 
 /* HG — left edge of outer ring (35vw radius), vertically centered */
 .hero-circle--hg {
-  left: calc(50% - 35vw - 130px);
-  top: calc(50% - 130px);
+  left: calc(50% - 35vw - 215px);
+  top: calc(50% - 215px);
 }
 /* NG — right edge of outer ring (35vw radius), vertically centered */
 .hero-circle--ng {
-  left: calc(50% + 35vw - 130px);
-  top: calc(50% - 130px);
+  left: calc(50% + 35vw - 215px);
+  top: calc(50% - 215px);
 }
 /* CG — centered, sits at lower portion of inner ring */
 .hero-circle--cg {
   left: 50%;
-  top: calc(50% + 14vw - 190px);
+  top: calc(50% + 14vw - 275px);
   transform: translateX(-50%);
 }
 
 .hero-circle-img {
-  width: 260px;
-  height: 260px;
+  width: 430px;
+  height: 430px;
   border-radius: 50%;
   object-fit: cover;
   display: block;
   position: relative;
   z-index: 1;
   transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ── Tablet ── */
+@media (max-width: 1024px) {
+  .hero-ring-outer { width: 68vw; height: 68vw; }
+  .hero-ring-inner { width: 54vw; height: 54vw; }
+  .hero-circle--hg { left: calc(50% - 34vw - 150px); top: calc(50% - 150px); }
+  .hero-circle--ng { left: calc(50% + 34vw - 150px); top: calc(50% - 150px); }
+  .hero-circle--cg { top: calc(50% + 13vw - 210px); }
+  .hero-circle-img { width: 300px; height: 300px; }
+}
+
+/* ── Mobile triangular ── */
+@media (max-width: 768px) {
+  .hero-ring-outer { width: 82vw; height: 82vw; }
+  .hero-ring-inner { width: 64vw; height: 64vw; }
+  .hero-circle--hg { left: calc(50% - 32vw - 90px); top: calc(50% - 90px); }
+  .hero-circle--ng { left: calc(50% + 32vw - 90px); top: calc(50% - 90px); }
+  .hero-circle--cg { top: calc(50% + 16vw - 150px); }
+  .hero-circle-img { width: 180px; height: 180px; }
 }
 .hero-circle::before {
   content: '';
@@ -417,7 +437,7 @@ main {
   .hero-circle--hg { order: 2; }
   .hero-circle--ng { order: 3; }
   .hero-circle--cg { order: 4; }
-  .hero-circle-img { width: 140px; height: 140px; }
+  .hero-circle-img { width: 180px; height: 180px; }
 }
 
 .btn {
@@ -1433,15 +1453,15 @@ main {
 
       <!-- Brand circles — absolutely positioned on the ring system -->
       <a href="#healthgen" class="hero-circle hero-circle--hg" aria-label="HealthGen — Strategy">
-        <img src="images/HG_circle.png" alt="Health Generation" class="hero-circle-img">
+        <img src="images/HG_circle.png?v=4" alt="Health Generation" class="hero-circle-img">
       </a>
 
       <a href="#nursegen" class="hero-circle hero-circle--ng" aria-label="NurseGen — People">
-        <img src="images/NG_circle.png" alt="NurseGen" class="hero-circle-img">
+        <img src="images/NG_circle.png?v=4" alt="NurseGen" class="hero-circle-img">
       </a>
 
       <a href="#caregen" class="hero-circle hero-circle--cg" aria-label="CareGen — Intelligence">
-        <img src="images/CG_circle.png" alt="CareGen" class="hero-circle-img">
+        <img src="images/CG_circle.png?v=4" alt="CareGen" class="hero-circle-img">
       </a>
 
     </div>
