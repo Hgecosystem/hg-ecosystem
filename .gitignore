@@ -3,3 +3,7 @@
 
 # Claude Code local (machine-specific) settings
 .claude/settings.local.json
+
+# Dev/test scratch pages (not part of the live site)
+style-test.html
+orbs-backup.html
