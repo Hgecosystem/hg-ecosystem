@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CareGen Intelligence — Coming Soon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   CareGen Intelligence — Coming Soon
+   Brand: dominant #612CAD (purple) · secondary #050025 (near-black)
+          accent #F5B533 (amber). Matches how-it-works.html / the
+          CareGen Brand Identity Guidelines.
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  --cg-dominant:  #612CAD;
+  --cg-mid:       #220749;
+  --cg-secondary: #050025;
+  --cg-accent:    #F5B533;
+
+  --text-1: rgba(255,255,255,0.94);
+  --text-2: rgba(255,255,255,0.68);
+  --text-3: rgba(255,255,255,0.48);
+
+  --font: 'Manrope', system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+}
+
+body {
+  background: var(--cg-secondary);
+  color: var(--text-1);
+  font-family: var(--font);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-x: hidden;
+  position: relative;
+  padding: 24px;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; }
+
+/* ─── Fixed background: soft blurred color blooms ─── */
+.page-bg { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+.bloom {
+  position: absolute;
+  width: 70vw; height: 120vh; top: -10vh;
+  border-radius: 50%;
+  filter: blur(120px);
+}
+.bloom--left {
+  left: -26vw;
+  background: radial-gradient(ellipse at 35% 35%, var(--cg-dominant) 0%, transparent 68%);
+  opacity: 0.38;
+}
+.bloom--right {
+  right: -26vw;
+  background: radial-gradient(ellipse at 65% 35%, var(--cg-accent) 0%, transparent 68%);
+  opacity: 0.22;
+}
+
+/* ─── Content ─── */
+.wrap {
+  position: relative;
+  z-index: 1;
+  max-width: 560px;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cg-icon {
+  width: 56px;
+  height: 56px;
+  margin-bottom: 28px;
+  opacity: 0.95;
+}
+
+.eyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--cg-accent);
+  margin-bottom: 18px;
+}
+
+h1 {
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 18px;
+}
+
+p.lede {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-2);
+  max-width: 440px;
+  margin-bottom: 40px;
+}
+
+.cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 26px;
+  border-radius: 100px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.btn-primary {
+  background: var(--cg-dominant);
+  color: #fff;
+}
+
+.btn-outline {
+  background: rgba(255,255,255,0.06);
+  color: var(--text-1);
+  border: 1px solid rgba(255,255,255,0.22);
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  opacity: 0.92;
+}
+
+.footnote {
+  margin-top: 48px;
+  font-size: 13px;
+  color: var(--text-3);
+}
+
+.footnote a {
+  color: var(--text-2);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 480px) {
+  .cta-row { flex-direction: column; width: 100%; }
+  .btn { justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<div class="page-bg" aria-hidden="true">
+  <div class="bloom bloom--left"></div>
+  <div class="bloom bloom--right"></div>
+</div>
+
+<div class="wrap">
+  <img src="images/caregen_icon.svg" alt="" class="cg-icon" aria-hidden="true">
+  <p class="eyebrow">CareGen Intelligence</p>
+  <h1>Coming soon.</h1>
+  <p class="lede">We're building CareGen's dedicated site — predictive risk monitoring, falls &amp; deterioration analytics, and clinical intelligence for aged care providers. In the meantime, get in touch and we'll keep you posted.</p>
+  <div class="cta-row">
+    <a href="https://www.healthgen.io/contact-healthgen" target="_blank" rel="noopener" class="btn btn-primary">Talk to Our Team</a>
+    <a href="index.html" class="btn btn-outline">Back to Health Generation</a>
+  </div>
+  <p class="footnote">Part of the <a href="index.html">Health Generation</a> ecosystem</p>
+</div>
+
+</body>
+</html>
