@@ -74,7 +74,7 @@ a { color: inherit; }
 .wrap {
   position: relative;
   z-index: 1;
-  max-width: 560px;
+  max-width: 620px;
   width: 100%;
   text-align: center;
   display: flex;
@@ -83,33 +83,28 @@ a { color: inherit; }
 }
 
 .cg-logo {
-  width: 300px;
+  width: 315px;
   max-width: 70vw;
   height: auto;
-  margin-bottom: 36px;
+  margin-bottom: 100px;
   opacity: 0.95;
 }
 
 h1 {
-  display: inline-flex;
-  align-items: center;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-1);
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.18);
-  border-radius: 100px;
-  padding: 6px 16px;
-  margin: 16px 0 56px;
+  margin-right: 29px; /* combined with the row's 20px gap = 49px after Coming Soon */
 }
 
 .cta-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  align-items: center;
   justify-content: center;
+  gap: 20px;
 }
 
 .btn {
@@ -140,9 +135,10 @@ h1 {
   opacity: 0.92;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
   .cta-row { flex-direction: column; width: 100%; }
   .btn { justify-content: center; }
+  h1 { margin-right: 0; }
 }
 </style>
 </head>
@@ -155,8 +151,8 @@ h1 {
 
 <div class="wrap">
   <img src="images/CG_Full_Color_Primary_Logo_White.svg" alt="CareGen Intelligence" class="cg-logo">
-  <h1>Coming Soon</h1>
   <div class="cta-row">
+    <h1>Coming Soon</h1>
     <a href="https://www.healthgen.io/contact-healthgen" target="_blank" rel="noopener" class="btn btn-primary">Talk to Our Team</a>
     <a href="https://www.hgecosystem.io/index.html" class="btn btn-outline">Back to HG Ecosystem</a>
   </div>
