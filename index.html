@@ -620,6 +620,7 @@ main {
   flex-direction: column;
   position: relative;
   overflow: hidden;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
 }
 
 /* ── Individual card gradients ── */
@@ -630,19 +631,37 @@ main {
   background: #59B0AB;
 }
 .biz-card--cg {
-  background-image: url('images/CareGen Intelligence Brand Identity.svg');
-  background-size: cover;
-  background-position: center;
 }
-
-/* Subtle inner highlight on each card top edge */
-.biz-card::before {
-  content: '';
+.biz-card--cg .cg-bg {
   position: absolute;
   inset: 0;
-  border-radius: var(--radius-card);
-  border-top: 1px solid rgba(255,255,255,0.08);
+  z-index: 0;
+  background: radial-gradient(circle at bottom right, #F5B533 0%, #9a5abc 18%, #3f1c66 42%, #1c0f3a 70%, #0a0518 100%);
+}
+.biz-card--cg::before {
+  content: '';
+  position: absolute;
+  width: 320px; height: 190px;
+  top: -40px; left: 50%;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse at center, rgba(97,44,173,0.35) 0%, transparent 68%);
+  filter: blur(24px);
   pointer-events: none;
+  z-index: 0;
+}
+.biz-card--cg::after {
+  content: '';
+  position: absolute;
+  width: 220px; height: 220px;
+  bottom: -70px; right: -40px;
+  background: radial-gradient(circle, rgba(245,181,51,0.38) 0%, rgba(154,90,188,0.22) 45%, transparent 72%);
+  filter: blur(28px);
+  pointer-events: none;
+  z-index: 0;
+}
+.biz-card--cg > *:not(.cg-bg) {
+  position: relative;
+  z-index: 1;
 }
 
 /* ── Icon badge ── */
@@ -1853,6 +1872,7 @@ main {
 
       <!-- ── CareGen ── -->
       <div class="biz-card biz-card--cg js-reveal" data-reveal-delay="300">
+        <div class="cg-bg" aria-hidden="true"></div>
         <div class="biz-icon" aria-hidden="true">
           <img src="images/caregen_icon.svg" alt="" width="32" height="32" style="width:32px;height:32px;object-fit:contain;">
         </div>
