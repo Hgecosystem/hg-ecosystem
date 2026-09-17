@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HG Ecosystem — Design System Starter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<!--
+  HOW THIS WORKS
+  ──────────────
+  This file is the shared component library extracted from the CareGen
+  Intelligence site, generalised so every sister brand can reuse the exact
+  same structure/animations and only swap colour tokens.
+
+  1. Link tokens/tokens.css (already in this folder) — it defines
+     --hg-*, --ng-*, --cg-* and --eco-* variables and the generic
+     --color-dominant / --color-secondary / --color-accent role aliases.
+  2. Put data-brand="healthgen" (or "nursegen" / "caregen") on <body>.
+     Every component below is written against --color-dominant /
+     --color-secondary / --color-accent, so it re-themes automatically.
+  3. Copy whichever section you need into the new site and keep the
+     class names as-is — the CSS in this file's style block is the
+     full shared stylesheet, drop it in wholesale or trim to what you use.
+
+  NOTE ON THE 4TH COLOUR: the live CareGen site also uses a private
+  --cg-mid (#220749) for a couple of gradients, which isn't part of the
+  3-token system in tokens/caregen.css. This starter uses --color-secondary
+  everywhere instead, so it works cleanly for any brand with just 3 tokens.
+  NurseGen's 4th token (--color-accent-2) is used only where noted.
+-->
+<link rel="stylesheet" href="tokens/tokens.css">
+
+<style>
+
+/* ═══════════════════════════════════════════════════════════════
+   BASE — swap the data-brand attribute on <body> to re-theme
+   ═══════════════════════════════════════════════════════════════ */
+:root {
+  --text-1: rgba(255,255,255,0.94);
+  --text-2: rgba(255,255,255,0.72);
+  --text-3: rgba(255,255,255,0.52);
+  --radius-card: 25px;
+  --font: 'Manrope', system-ui, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--color-secondary);
+  color: var(--text-1);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+a { text-decoration: none; color: inherit; }
+
+/* ═══ FIXED BACKGROUND — edge colour blooms + film grain ═════════ */
+.page-bg { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+.bloom { position: absolute; width: 74vw; height: 130vh; top: -15vh; border-radius: 50%; filter: blur(130px); }
+.bloom--left {
+  left: -28vw;
+  background: radial-gradient(ellipse at 35% 35%, var(--color-dominant) 0%, transparent 68%);
+  opacity: 0.40;
+}
+.bloom--right {
+  right: -28vw;
+  background: radial-gradient(ellipse at 65% 35%, var(--color-accent) 0%, transparent 68%);
+  opacity: 0.30;
+}
+.grain-overlay { position: fixed; inset: 0; pointer-events: none; z-index: 9999; opacity: 0.05; mix-blend-mode: overlay; }
+.grain-overlay svg { width: 100%; height: 100%; display: block; }
+
+main { position: relative; z-index: 1; }
+
+/* ═══ NAV — dark frosted-glass pill ═══════════════════════════════ */
+.nav-outer {
+  position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
+  z-index: 100; display: inline-flex; align-items: center; gap: 16px;
+  max-width: calc(100vw - 32px);
+}
+.nav-brand { display: inline-flex; align-items: center; flex-shrink: 0; }
+.nav-brand-logo { height: 44px; width: auto; display: block; flex-shrink: 0; }
+.nav-brand-icon-only { display: none; height: 34px; width: auto; flex-shrink: 0; opacity: 0.9; }
+
+.site-nav {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 999px;
+  padding: 0 6px 0 22px;
+  height: 50px;
+  display: inline-flex; align-items: center; gap: 2px;
+  box-shadow: 0 2px 24px rgba(0,0,0,0.35);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  white-space: nowrap;
+}
+.nav-links { display: flex; align-items: center; gap: 2px; list-style: none; }
+.nav-links a { font-size: 13px; font-weight: 500; color: var(--text-2); padding: 5px 10px; border-radius: 999px; transition: color 0.18s, background 0.18s; }
+.nav-links a:hover, .nav-links a.is-current { color: #fff; background: rgba(255,255,255,0.08); }
+.nav-cta {
+  font-size: 13px; font-weight: 700; color: #fff;
+  background: var(--color-dominant); border-radius: 999px; padding: 8px 18px;
+  white-space: nowrap; transition: background 0.18s, transform 0.18s;
+  flex-shrink: 0; margin-left: 6px;
+}
+.nav-cta:hover { filter: brightness(1.15); transform: translateY(-1px); }
+
+.nav-hamburger {
+  display: none; align-items: center; justify-content: center;
+  width: 44px; height: 44px;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 999px; cursor: pointer;
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 2px 24px rgba(0,0,0,0.35); flex-shrink: 0;
+}
+.nav-hamburger span { display: block; width: 18px; height: 1.5px; background: #fff; border-radius: 2px; position: relative; transition: transform 0.25s ease, opacity 0.25s ease; }
+.nav-hamburger span::before, .nav-hamburger span::after {
+  content: ''; display: block; width: 18px; height: 1.5px; background: #fff; border-radius: 2px;
+  position: absolute; left: 0; transition: transform 0.25s ease, opacity 0.25s ease;
+}
+.nav-hamburger span::before { top: -5px; }
+.nav-hamburger span::after  { top: 5px; }
+.nav-hamburger.is-open span { background: transparent; }
+.nav-hamburger.is-open span::before { transform: translateY(5px) rotate(45deg); }
+.nav-hamburger.is-open span::after  { transform: translateY(-5px) rotate(-45deg); }
+
+.nav-drawer {
+  display: none; position: fixed; inset: 0; z-index: 99; padding-top: 90px;
+  flex-direction: column; align-items: center; justify-content: flex-start; gap: 8px;
+  background: color-mix(in srgb, var(--color-secondary) 96%, black);
+  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  opacity: 0; transform: translateY(-8px);
+  transition: opacity 0.25s ease, transform 0.25s ease; pointer-events: none;
+}
+.nav-drawer.is-open { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.nav-drawer a { font-size: 18px; font-weight: 600; color: #fff; padding: 14px 24px; width: 100%; text-align: center; border-radius: 12px; max-width: 320px; transition: background 0.15s; }
+.nav-drawer a:hover, .nav-drawer a.is-current { background: rgba(255,255,255,0.08); }
+.nav-drawer .nav-drawer-cta { margin-top: 16px; background: var(--color-dominant); color: #fff; border-radius: 999px; }
+
+@media (max-width: 820px) {
+  .nav-outer { gap: 10px; }
+  .nav-brand-logo { display: none; }
+  .nav-brand-icon-only { display: block; }
+  .nav-links { display: none; }
+  .nav-cta { display: none; }
+  .nav-hamburger { display: inline-flex; }
+  .nav-drawer { display: flex; }
+}
+
+/* ═══ BUTTONS ═════════════════════════════════════════════════════ */
+.btn {
+  display: inline-flex; align-items: center; justify-content: space-between; gap: 10px;
+  border-radius: 100px; font-family: var(--font); font-size: 14px; font-weight: 600;
+  cursor: pointer; transition: all 0.22s ease; white-space: nowrap;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--color-dominant) 0%, var(--color-dominant) 65%, var(--color-accent) 100%);
+  color: #fff; padding: 14.5px 21.5px 14.5px 29.5px; border: none;
+}
+.btn-primary:hover { filter: brightness(1.12); transform: translateY(-1px); box-shadow: 0 8px 28px rgba(0,0,0,0.35); }
+.btn-primary:hover .btn-icon { transform: translateX(4px); }
+.btn-secondary { background: transparent; color: var(--text-2); padding: 0 24px 0 28px; height: 46px; border: 1.5px solid rgba(255,255,255,0.22); }
+.btn-secondary:hover { border-color: rgba(255,255,255,0.42); color: #fff; background: rgba(255,255,255,0.06); }
+.btn-secondary:hover .btn-icon { transform: translateX(3px); }
+.btn-icon { display: inline-flex; align-items: center; transition: transform 0.22s ease; flex-shrink: 0; }
+
+/* ═══ HERO ═════════════════════════════════════════════════════════
+   Full-bleed gradient hero built from the brand's own dominant →
+   accent stops, with a subtle "breathing" zoom and scroll parallax. */
+.hero-wrap { padding: 0; }
+.hero-card {
+  position: relative; min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  overflow: hidden; padding: 80px 5% 80px;
+}
+.hero-bg { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+.hero-bg-parallax { position: absolute; top: 0; left: 0; right: 0; bottom: -25%; will-change: transform; transform: translateZ(0); }
+.hero-bg-img {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  background:
+    radial-gradient(55% 45% at 22% 88%, rgba(255,255,255,0.18) 0%, transparent 62%),
+    linear-gradient(172deg, #000000 0%, var(--color-secondary) 22%, var(--color-dominant) 66%, var(--color-accent) 100%);
+  background-size: cover; background-position: center center;
+  animation: hero-breathe 12s ease-in-out infinite alternate;
+  will-change: transform; transform: translateZ(0);
+}
+@keyframes hero-breathe { from { transform: scale(1); } to { transform: scale(1.06); } }
+.hero-overlay {
+  position: absolute; inset: 0;
+  background: radial-gradient(120% 90% at 50% 15%, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.2) 45%, rgba(0,0,0,0.05) 75%);
+  z-index: 1;
+}
+.hero-content { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; text-align: center; max-width: 620px; margin-top: -20px; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--text-1); background: rgba(255,255,255,0.06);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 55%, transparent);
+  border-radius: 100px; padding: 6px 16px; margin-bottom: 22px;
+  backdrop-filter: blur(8px);
+}
+.hero-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--color-accent); }
+.hero-heading { font-family: var(--font); font-weight: 800; letter-spacing: -0.025em; margin-bottom: 18px; }
+.hero-line-1 { display: block; font-size: clamp(28px, 4vw, 50px); line-height: 1.12; letter-spacing: -0.025em; color: #fff; }
+.hero-line-2 {
+  display: inline-block; font-size: clamp(28px, 4vw, 50px); line-height: 1.12; letter-spacing: -0.025em;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--color-dominant) 55%, white) 0%, var(--color-accent) 100%);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;
+}
+.hero-sub { font-size: clamp(15px, 1.3vw, 17px); font-weight: 400; line-height: 1.65; color: var(--text-2); max-width: 480px; margin-bottom: 34px; text-wrap: pretty; }
+.hero-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; justify-content: center; margin-bottom: 56px; }
+
+@keyframes hero-fade-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.hero-badge   { opacity: 0; animation: hero-fade-up 0.9s cubic-bezier(0.16,1,0.3,1) 0.2s  both; }
+.hero-heading { opacity: 0; animation: hero-fade-up 0.9s cubic-bezier(0.16,1,0.3,1) 0.45s both; }
+.hero-sub     { opacity: 0; animation: hero-fade-up 0.9s cubic-bezier(0.16,1,0.3,1) 0.7s  both; }
+.hero-actions { opacity: 0; animation: hero-fade-up 0.9s cubic-bezier(0.16,1,0.3,1) 0.95s both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-bg-img { animation: none; }
+  .hero-badge, .hero-heading, .hero-sub, .hero-actions { opacity: 1; animation: none; }
+}
+@media (min-width: 769px) {
+  .hero-content { max-width: min(92vw, 980px); }
+  .hero-line-2 { white-space: nowrap; font-size: clamp(20px, 3.2vw, 50px); }
+}
+
+/* ═══ SECTION HEADER PATTERN — badge + heading + sub, centered ═══ */
+.cap-section { margin: 40px 2.5vw 0; }
+.cap-panel {
+  position: relative; overflow: hidden;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: var(--radius-card);
+  padding: 72px 7% 80px;
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+}
+.cap-header { text-align: center; max-width: 720px; margin: 0 auto 56px; }
+.cap-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--text-1); background: rgba(255,255,255,0.06);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 45%, transparent);
+  border-radius: 100px; padding: 6px 16px; margin-bottom: 20px;
+}
+.cap-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--color-accent); }
+.cap-heading { font-size: clamp(28px, 3.2vw, 42px); font-weight: 800; color: var(--text-1); letter-spacing: -0.025em; line-height: 1.12; margin-bottom: 14px; text-wrap: balance; }
+.cap-sub { font-size: 16px; color: var(--text-2); line-height: 1.6; }
+
+/* ═══ CARD GRID — reusable icon + title + body card ═══════════════ */
+.layer-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+@media (max-width: 640px) { .layer-grid { grid-template-columns: 1fr; } }
+
+.cap-card {
+  position: relative;
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12);
+  border-radius: var(--radius-card); padding: 32px 28px 34px;
+}
+.cap-icon-wrap {
+  width: 52px; height: 52px; border-radius: 13px; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-bottom: 22px;
+  background: linear-gradient(135deg, var(--color-dominant), var(--color-secondary));
+}
+.cap-card-title { font-size: 19px; font-weight: 700; color: var(--text-1); letter-spacing: -0.02em; margin-bottom: 10px; }
+.cap-card-body { font-size: 14.5px; line-height: 1.65; color: var(--text-2); }
+
+.cap-card:hover {
+  transform: translateY(-6px);
+  border-color: color-mix(in srgb, var(--color-accent) 55%, transparent);
+  box-shadow: 0 18px 40px rgba(0,0,0,0.35), 0 0 26px color-mix(in srgb, var(--color-accent) 28%, transparent);
+}
+@media (prefers-reduced-motion: reduce) { .cap-card:hover { transform: none; } }
+
+/* Scroll-reveal states shared by cards + any .js-reveal element */
+.cap-card, .js-reveal {
+  opacity: 0; transform: translateY(30px);
+  transition: opacity 0.6s ease-out, transform 0.3s ease-out, border-color 0.3s ease-out, box-shadow 0.3s ease-out, background 0.3s ease-out;
+}
+.cap-card.cap-card--visible, .js-reveal.js-reveal--visible { opacity: 1; transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) {
+  .cap-card, .js-reveal { opacity: 1; transform: none; transition: none; }
+}
+
+/* ═══ TRUST / ICON-ROW CARD — smaller 3-up variant (compliance, etc) ═══ */
+.trust-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+@media (max-width: 900px) { .trust-row { grid-template-columns: 1fr; } }
+.trust-item { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: var(--radius-card); padding: 30px 26px 32px; }
+.trust-icon-wrap {
+  width: 48px; height: 48px; border-radius: 13px; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-bottom: 20px;
+  background: linear-gradient(135deg, var(--color-dominant), var(--color-secondary));
+}
+.trust-item-title { font-size: 17px; font-weight: 700; color: var(--text-1); letter-spacing: -0.01em; margin-bottom: 10px; }
+.trust-item-body { font-size: 14px; line-height: 1.7; color: var(--text-2); }
+
+/* ═══ CTA CARD — the gradient "Get Started" panel ══════════════════
+   See the standalone write-up for how this is layered; kept here so
+   the whole system lives in one file. */
+.cta-wrap { padding: 40px 2.5vw 0; position: relative; z-index: 1; }
+.cta-card { border-radius: var(--radius-card); padding: 96px 7% 100px; text-align: center; position: relative; overflow: hidden; }
+.cta-bg {
+  position: absolute; top: -120px; bottom: -120px; left: 0; right: 0;
+  z-index: 0; will-change: transform;
+  background: linear-gradient(140deg, #0a0518 0%, var(--color-secondary) 30%, var(--color-dominant) 58%, color-mix(in srgb, var(--color-dominant) 40%, var(--color-accent)) 82%, var(--color-accent) 100%);
+}
+.cta-card::before {
+  content: ''; position: absolute; width: 700px; height: 420px; top: -80px; left: 50%; transform: translateX(-50%);
+  background: radial-gradient(ellipse at center, color-mix(in srgb, var(--color-dominant) 35%, transparent) 0%, transparent 68%);
+  filter: blur(40px); pointer-events: none;
+}
+.cta-card::after {
+  content: ''; position: absolute; width: 460px; height: 460px; bottom: -140px; right: -80px;
+  background: radial-gradient(circle, color-mix(in srgb, var(--color-accent) 38%, transparent) 0%, color-mix(in srgb, var(--color-dominant) 22%, transparent) 45%, transparent 72%);
+  filter: blur(55px); pointer-events: none;
+}
+.cta-content { position: relative; z-index: 1; }
+.cta-eyebrow { display: inline-block; font-size: 10.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 22px; }
+.cta-heading { font-size: clamp(30px, 4.2vw, 52px); font-weight: 800; color: var(--text-1); letter-spacing: -0.025em; line-height: 1.1; margin-bottom: 22px; text-wrap: balance; }
+.cta-body { font-size: clamp(15px, 1.4vw, 17px); line-height: 1.7; color: var(--text-2); max-width: 560px; margin: 0 auto 40px; text-wrap: pretty; }
+.cta-fineprint { font-size: 13px; color: var(--text-3); margin-top: 20px; }
+@media (max-width: 780px) { .cta-card { padding: 64px 6% 72px; } }
+
+/* ═══ FOOTER ═══════════════════════════════════════════════════════ */
+.site-footer {
+  position: relative; z-index: 1;
+  margin: 40px 2.5vw 24px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: var(--radius-card);
+  padding: 40px 7% 28px;
+  color: var(--text-2);
+  font-size: 13px;
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+}
+.footer-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
+.footer-logo { text-decoration: none; }
+.footer-logo-img { height: 32px; width: auto; display: block; }
+.footer-social { display: flex; gap: 10px; }
+.footer-social a {
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border-radius: 8px;
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12);
+  color: var(--text-2); text-decoration: none;
+  transition: background 0.18s, border-color 0.18s, color 0.18s;
+}
+.footer-social a:hover { background: color-mix(in srgb, var(--color-dominant) 18%, transparent); border-color: color-mix(in srgb, var(--color-dominant) 40%, transparent); color: var(--text-1); }
+.footer-social svg { width: 16px; height: 16px; fill: currentColor; }
+.footer-links {
+  display: flex; align-items: center; justify-content: center; gap: 6px; flex-wrap: wrap;
+  list-style: none; margin: 0 0 28px; padding: 0;
+  border-top: 1px solid rgba(255,255,255,0.10); padding-top: 24px;
+}
+.footer-links a { font-size: 13px; font-weight: 500; color: var(--text-2); text-decoration: none; padding: 4px 10px; transition: color 0.18s; }
+.footer-links a:hover { color: var(--text-1); }
+.footer-copy { text-align: center; font-size: 13px; color: var(--text-3); border-top: 1px solid rgba(255,255,255,0.08); padding-top: 20px; margin: 0; }
+
+@media (max-width: 560px) {
+  .site-footer { margin: 20px 16px 20px; padding: 32px 6% 24px; }
+  .footer-top { flex-direction: column; gap: 16px; align-items: flex-start; }
+  .cap-section { margin: 20px 16px 0; }
+  .cap-panel { padding: 56px 6% 60px; }
+}
+
+</style>
+</head>
+<body data-brand="caregen">
+<!-- ↑ Change to data-brand="healthgen" or data-brand="nursegen" to re-theme everything below -->
+
+<div class="page-bg" aria-hidden="true">
+  <div class="bloom bloom--left"></div>
+  <div class="bloom bloom--right"></div>
+</div>
+
+<div class="grain-overlay" aria-hidden="true">
+  <svg xmlns="http://www.w3.org/2000/svg">
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.80" numOctaves="4" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+    </filter>
+    <rect width="100%" height="100%" filter="url(#grain)"/>
+  </svg>
+</div>
+
+<!-- ═══ NAV ═══════════════════════════════════════════════════════ -->
+<div class="nav-outer">
+  <a href="#" class="nav-brand">
+    <img src="images/logo-white.svg" alt="Company name" class="nav-brand-logo">
+    <img src="images/icon-white.svg" alt="Company name" class="nav-brand-icon-only">
+  </a>
+  <nav class="site-nav" aria-label="Main navigation">
+    <ul class="nav-links">
+      <li><a href="#" class="is-current">Capabilities</a></li>
+      <li><a href="#">How It Works</a></li>
+      <li><a href="#">Compliance</a></li>
+    </ul>
+    <a href="#" class="nav-cta">Book a Discovery Call</a>
+    <button class="nav-hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="nav-drawer">
+      <span></span>
+    </button>
+  </nav>
+</div>
+<div class="nav-drawer" id="nav-drawer" role="dialog" aria-label="Navigation menu">
+  <a href="#" class="is-current">Capabilities</a>
+  <a href="#">How It Works</a>
+  <a href="#">Compliance</a>
+  <a href="#" class="nav-drawer-cta">Book a Discovery Call</a>
+</div>
+
+<main>
+
+  <!-- ═══ HERO ═════════════════════════════════════════════════════ -->
+  <section class="hero-wrap" aria-label="Hero">
+    <div class="hero-card">
+      <div class="hero-bg" aria-hidden="true">
+        <div class="hero-bg-parallax"><div class="hero-bg-img"></div></div>
+        <div class="hero-overlay"></div>
+      </div>
+      <div class="hero-content">
+        <span class="hero-badge">Powered by [Company]</span>
+        <h1 class="hero-heading">
+          <span class="hero-line-1">Lead line here.</span>
+          <span class="hero-line-2">Gradient payoff line.</span>
+        </h1>
+        <p class="hero-sub">One or two sentences describing what the product does and for whom.</p>
+        <div class="hero-actions">
+          <a href="#" class="btn btn-primary">
+            Book a Discovery Call
+            <span class="btn-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </a>
+          <a href="#" class="btn btn-secondary">
+            See How It Works
+            <span class="btn-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CARD GRID SECTION ═══════════════════════════════════════ -->
+  <section class="cap-section" aria-label="Capabilities">
+    <div class="cap-panel">
+      <div class="cap-header">
+        <span class="cap-badge js-reveal" data-reveal-delay="0">Section Label</span>
+        <h2 class="cap-heading js-reveal" data-reveal-delay="100">Section headline goes here.</h2>
+        <p class="cap-sub js-reveal" data-reveal-delay="200">One sentence summarising the section.</p>
+      </div>
+      <div class="layer-grid">
+        <div class="cap-card" data-cap-delay="0">
+          <div class="cap-icon-wrap" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="white" stroke-width="1.5"/></svg>
+          </div>
+          <h3 class="cap-card-title">Card title</h3>
+          <p class="cap-card-body">Card body copy describing this point in one or two sentences.</p>
+        </div>
+        <div class="cap-card" data-cap-delay="100">
+          <div class="cap-icon-wrap" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="white" stroke-width="1.5"/></svg>
+          </div>
+          <h3 class="cap-card-title">Card title</h3>
+          <p class="cap-card-body">Card body copy describing this point in one or two sentences.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ TRUST / ICON-ROW SECTION ═══════════════════════════════ -->
+  <section class="cap-section" aria-label="Compliance and trust">
+    <div class="cap-panel">
+      <div class="cap-header">
+        <span class="cap-badge js-reveal" data-reveal-delay="0">Compliance &amp; Trust</span>
+        <h2 class="cap-heading js-reveal" data-reveal-delay="100">Built for the standards you operate under.</h2>
+      </div>
+      <div class="trust-row">
+        <div class="trust-item cap-card" data-cap-delay="0">
+          <div class="trust-icon-wrap" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-3z" stroke="white" stroke-width="1.5" fill="none"/></svg></div>
+          <h3 class="trust-item-title">Trust point title</h3>
+          <p class="trust-item-body">Short supporting sentence.</p>
+        </div>
+        <div class="trust-item cap-card" data-cap-delay="100">
+          <div class="trust-icon-wrap" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-3z" stroke="white" stroke-width="1.5" fill="none"/></svg></div>
+          <h3 class="trust-item-title">Trust point title</h3>
+          <p class="trust-item-body">Short supporting sentence.</p>
+        </div>
+        <div class="trust-item cap-card" data-cap-delay="200">
+          <div class="trust-icon-wrap" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-3z" stroke="white" stroke-width="1.5" fill="none"/></svg></div>
+          <h3 class="trust-item-title">Trust point title</h3>
+          <p class="trust-item-body">Short supporting sentence.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FINAL CTA CARD ═══════════════════════════════════════════ -->
+  <section class="cta-wrap" aria-label="Call to action">
+    <div class="cta-card">
+      <div class="cta-bg" aria-hidden="true"></div>
+      <div class="cta-content">
+        <p class="cta-eyebrow js-reveal" data-reveal-delay="0">Get Started</p>
+        <h2 class="cta-heading js-reveal" data-reveal-delay="100">Talk to us about<br>what [product] could catch.</h2>
+        <p class="cta-body js-reveal" data-reveal-delay="200">Book a 30-minute discovery call and we'll walk through your current gaps and how this could close them.</p>
+        <a href="#" class="btn btn-primary js-reveal" data-reveal-delay="300" style="margin: 0 auto; display: inline-flex;">
+          Book a Discovery Call
+          <span class="btn-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </a>
+        <p class="cta-fineprint js-reveal" data-reveal-delay="400">It starts with one conversation, not a contract.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ═══ FOOTER ═══════════════════════════════════════════════════ -->
+<footer class="site-footer" aria-label="Site footer">
+  <div class="footer-top">
+    <a href="#" class="footer-logo"><img src="images/logo-white.svg" alt="Company name" class="footer-logo-img"></a>
+    <div class="footer-social">
+      <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+      <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg></a>
+    </div>
+  </div>
+  <ul class="footer-links">
+    <li><a href="#">Capabilities</a></li>
+    <li><a href="#">How It Works</a></li>
+    <li><a href="#">Compliance</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+  <p class="footer-copy">&copy; 2026 Health Generation. All rights reserved.</p>
+</footer>
+
+<!-- ═══ SHARED SCRIPTS ═══════════════════════════════════════════ -->
+
+<!-- Nav hamburger toggle -->
+<script>
+(function () {
+  var btn = document.querySelector('.nav-hamburger');
+  var drawer = document.getElementById('nav-drawer');
+  if (!btn || !drawer) return;
+  function openMenu() {
+    drawer.classList.add('is-open'); btn.classList.add('is-open');
+    btn.setAttribute('aria-expanded', 'true'); btn.setAttribute('aria-label', 'Close menu');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMenu() {
+    drawer.classList.remove('is-open'); btn.classList.remove('is-open');
+    btn.setAttribute('aria-expanded', 'false'); btn.setAttribute('aria-label', 'Open menu');
+    document.body.style.overflow = '';
+  }
+  btn.addEventListener('click', function () { drawer.classList.contains('is-open') ? closeMenu() : openMenu(); });
+  drawer.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', closeMenu); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeMenu(); });
+})();
+</script>
+
+<!-- Hero background parallax on scroll -->
+<script>
+(function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var el = document.querySelector('.hero-bg-parallax');
+  if (!el) return;
+  var ticking = false;
+  window.addEventListener('scroll', function () {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function () {
+      el.style.transform = 'translateZ(0) translateY(-' + (window.scrollY * 0.4).toFixed(1) + 'px)';
+      ticking = false;
+    });
+  }, { passive: true });
+})();
+</script>
+
+<!-- CTA panel parallax -->
+<script>
+(function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var card = document.querySelector('.cta-card');
+  var bg = document.querySelector('.cta-bg');
+  if (!card || !bg) return;
+  var ticking = false;
+  function render() {
+    var rect = card.getBoundingClientRect();
+    var shift = Math.max(-90, Math.min(90, -rect.top * 0.15));
+    bg.style.transform = 'translateZ(0) translateY(' + shift.toFixed(1) + 'px)';
+    ticking = false;
+  }
+  window.addEventListener('scroll', function () {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(render);
+  }, { passive: true });
+})();
+</script>
+
+<!-- Scroll entrance animations: .cap-card (with data-cap-delay) and .js-reveal (with data-reveal-delay) -->
+<script>
+(function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var capCards = document.querySelectorAll('.cap-card');
+  if (capCards.length) {
+    var capObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        var card = entry.target;
+        if (entry.isIntersecting) {
+          var delay = parseFloat(card.dataset.capDelay) || 0;
+          setTimeout(function () { card.classList.add('cap-card--visible'); }, delay);
+        } else {
+          card.classList.remove('cap-card--visible');
+        }
+      });
+    }, { threshold: 0.15 });
+    capCards.forEach(function (card, i) {
+      if (!card.dataset.capDelay) card.dataset.capDelay = i * 100;
+      capObserver.observe(card);
+    });
+  }
+
+  var reveals = document.querySelectorAll('.js-reveal');
+  if (reveals.length) {
+    var revealObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        var el = entry.target;
+        if (entry.isIntersecting) {
+          var delay = parseFloat(el.dataset.revealDelay) || 0;
+          setTimeout(function () { el.classList.add('js-reveal--visible'); }, delay);
+        } else {
+          el.classList.remove('js-reveal--visible');
+        }
+      });
+    }, { threshold: 0.15 });
+    reveals.forEach(function (el) { revealObserver.observe(el); });
+  }
+})();
+</script>
+
+</body>
+</html>
