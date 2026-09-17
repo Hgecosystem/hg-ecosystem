@@ -25,11 +25,15 @@
      class names as-is — the CSS in this file's style block is the
      full shared stylesheet, drop it in wholesale or trim to what you use.
 
-  NOTE ON THE 4TH COLOUR: the live CareGen site also uses a private
-  --cg-mid (#220749) for a couple of gradients, which isn't part of the
-  3-token system in tokens/caregen.css. This starter uses --color-secondary
-  everywhere instead, so it works cleanly for any brand with just 3 tokens.
-  NurseGen's 4th token (--color-accent-2) is used only where noted.
+  NOTE ON EXTRA TOKENS: CareGen's tokens/caregen.css now also defines
+  --color-mid (#220749, --cg-mid) and --color-highlight (#B784FF,
+  --cg-highlight — the primary button's hover fill and the light stop
+  in the hero gradient text). This starter still uses --color-dominant/
+  --color-secondary/--color-accent everywhere so the same markup works
+  for any brand with just the base 3 tokens; swap in var(--color-mid)
+  or var(--color-highlight) directly where you want CareGen's fuller
+  gradient treatment. NurseGen's 4th token (--color-accent-2) works the
+  same way.
 -->
 <link rel="stylesheet" href="tokens/tokens.css">
 

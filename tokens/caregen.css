@@ -1,20 +1,32 @@
 /* ═══════════════════════════════════════════════════════════════
    CareGen — colour tokens
-   60% Dominant | 30% Secondary | 10% Accent
+   Extended beyond the base 3-role system as the brand developed
+   further in the live site build. Approximate usage, measured from
+   the site's CSS: Dominant 37% | Accent 32% | Secondary 16% |
+   Highlight 10% | Mid 5%.
    ═══════════════════════════════════════════════════════════════ */
 
 :root {
-  /* Dominant — 60% of visual weight.
-     Backgrounds, large surfaces, nav bars, hero sections. */
+  /* Dominant — backgrounds, large surfaces, nav bars, hero sections,
+     primary-button base colour. */
   --cg-dominant: #612CAD;
 
-  /* Secondary — 30% of visual weight.
-     Cards, panels, secondary buttons, section dividers. */
+  /* Secondary — page background, deepest gradient stop, dark
+     text-on-light. */
   --cg-secondary: #050025;
 
-  /* Accent — 10% of visual weight.
-     CTAs, links, highlights, icons — used sparingly for emphasis. */
+  /* Accent — CTAs, links, highlights, icon accents, hero gradient
+     endpoint. */
   --cg-accent: #F5B533;
+
+  /* Mid — deeper gradient stop sitting between Dominant and
+     Secondary, used in icon and card backgrounds. */
+  --cg-mid: #220749;
+
+  /* Highlight — lighter gradient stop + hover state. Used for the
+     primary button's hover fill and the light-purple stop in the
+     "Better care." hero gradient text. */
+  --cg-highlight: #B784FF;
 }
 
 /* Role aliases — scope a page or component to this brand with
@@ -24,4 +36,6 @@
   --color-dominant:  var(--cg-dominant);
   --color-secondary: var(--cg-secondary);
   --color-accent:    var(--cg-accent);
+  --color-mid:       var(--cg-mid);
+  --color-highlight: var(--cg-highlight);
 }

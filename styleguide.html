@@ -869,29 +869,42 @@ ul { list-style: none; }
       </div>
     </div>
 
-    <p class="sg-sub-label">CareGen &mdash; 60/30/10</p>
+    <p class="sg-sub-label">CareGen &mdash; extended palette, as built (5 colours)</p>
     <div class="sg-ratio-bar" aria-hidden="true">
-      <span class="r60" style="background:var(--cg-dominant)">60%</span>
-      <span class="r30" style="background:var(--cg-secondary)">30%</span>
-      <span class="r10" style="background:var(--cg-accent); color:rgba(19,23,52,0.75)">10%</span>
+      <span style="width:37%; background:var(--cg-dominant)">37%</span>
+      <span style="width:32%; background:var(--cg-accent); color:rgba(19,23,52,0.75)">32%</span>
+      <span style="width:16%; background:var(--cg-secondary)">16%</span>
+      <span style="width:10%; background:var(--cg-highlight); color:rgba(19,23,52,0.75)">10%</span>
+      <span style="width:5%; background:var(--cg-mid)">5%</span>
     </div>
     <div class="sg-roles">
       <div class="sg-role">
         <span class="sg-role-chip"><i style="background:var(--cg-dominant)"></i>Dominant</span>
         <span class="sg-role-hex">#612CAD &middot; --cg-dominant</span>
-        <p class="sg-role-desc">60% of visual weight. Backgrounds, large surfaces, nav bars, hero sections.</p>
-      </div>
-      <div class="sg-role">
-        <span class="sg-role-chip"><i style="background:var(--cg-secondary)"></i>Secondary</span>
-        <span class="sg-role-hex">#050025 &middot; --cg-secondary</span>
-        <p class="sg-role-desc">30% of visual weight. Cards, panels, secondary buttons, section dividers.</p>
+        <p class="sg-role-desc">~37% of usage. Backgrounds, nav CTA, primary-button base, icon gradients.</p>
       </div>
       <div class="sg-role">
         <span class="sg-role-chip"><i style="background:var(--cg-accent)"></i>Accent</span>
         <span class="sg-role-hex">#F5B533 &middot; --cg-accent</span>
-        <p class="sg-role-desc">10% of visual weight. CTAs, links, highlights, icons &mdash; used sparingly for emphasis.</p>
+        <p class="sg-role-desc">~32% of usage. CTAs, links, highlights, icon accents, hero gradient endpoint.</p>
+      </div>
+      <div class="sg-role">
+        <span class="sg-role-chip"><i style="background:var(--cg-secondary)"></i>Secondary</span>
+        <span class="sg-role-hex">#050025 &middot; --cg-secondary</span>
+        <p class="sg-role-desc">~16% of usage. Page background, deepest gradient stop, dark text-on-light.</p>
+      </div>
+      <div class="sg-role">
+        <span class="sg-role-chip"><i style="background:var(--cg-highlight)"></i>Highlight</span>
+        <span class="sg-role-hex">#B784FF &middot; --cg-highlight</span>
+        <p class="sg-role-desc">~10% of usage. Hover fill on the primary button, lighter gradient stop in the "Better care." hero text and card glows.</p>
+      </div>
+      <div class="sg-role">
+        <span class="sg-role-chip"><i style="background:var(--cg-mid)"></i>Mid Tone</span>
+        <span class="sg-role-hex">#220749 &middot; --cg-mid</span>
+        <p class="sg-role-desc">~5% of usage. Deeper gradient stop between Dominant and Secondary, used in icon and card backgrounds.</p>
       </div>
     </div>
+    <p class="sg-caption">Percentages are approximate &mdash; based on how often each colour appears in the live site's CSS, not an exact visual-area measurement. Re-check if the palette changes again.</p>
 
     <p class="sg-sub-label">Legacy &mdash; current site values (not yet migrated to tokens)</p>
     <div class="sg-swatches">
