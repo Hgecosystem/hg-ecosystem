@@ -6,15 +6,21 @@
 :root {
   /* Dominant — 60% of visual weight.
      Backgrounds, large surfaces, nav bars, hero sections. */
-  --hg-dominant: #131734;
+  --hg-dominant: #252D64;
 
   /* Secondary — 30% of visual weight.
      Cards, panels, secondary buttons, section dividers. */
-  --hg-secondary: #252D64;
+  --hg-secondary: #131734;
 
-  /* Accent — 10% of visual weight.
+  /* Accent — 10% of visual weight. Used very strategically, in
+     limited amounts.
      CTAs, links, highlights, icons — used sparingly for emphasis. */
   --hg-accent: #FF616B;
+
+  /* Extended — small-percentage supporting colours, layered in
+     alongside the base 60/30/10 system. */
+  --hg-blue-accent: #435DA9;
+  --hg-light-blue: #B3CEF7;
 }
 
 /* Role aliases — scope a page or component to this brand with
@@ -24,4 +30,6 @@
   --color-dominant:  var(--hg-dominant);
   --color-secondary: var(--hg-secondary);
   --color-accent:    var(--hg-accent);
+  --color-blue-accent: var(--hg-blue-accent);
+  --color-light-blue:  var(--hg-light-blue);
 }
